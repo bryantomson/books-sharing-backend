@@ -4,9 +4,9 @@ require('dotenv').config({
     path: `${__dirname}/../.env.${ENV}`,
 });
 
+mongoose.connect(process.env.DATABASE_URL)
+const db = mongoose.connection
 
-mongoose.connect(process.env.DATABASE_URL);
-const db = mongoose.connection;
 
 if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL not set');

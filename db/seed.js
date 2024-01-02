@@ -1,13 +1,11 @@
-const mongoose = require("mongoose");
-const db = require("../app.js")
 const Book = require("./schema/book-schema.js")
 const User = require("./schema/user-schema.js")
-const Message = require('./messlocation-schema.js')
+const Message = require('./schema/message-schema.js')
 const Genre = require('./schema/genre-schema.js')
 
 const seedBooks = [
     {
-      title: "The Hitchhiker's Guide to the Galaxy",
+      title: "A Hitchhiker's Guide to the Galaxy",
       username: "John Doe",
       author: "Douglas Adams",
       published_date: "1979-10-12",
@@ -111,7 +109,7 @@ const seedUsers = [
     number_lent: 2,
   },
   {
-    name: "Jane Smith",
+    username: "Jane Smith",
     location: 'Leeds',
     password: "Fiction",
     avatar_img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU',
@@ -121,7 +119,7 @@ const seedUsers = [
     number_lent: 2,
   },
   {
-    name: "Bob Johnson",
+    username: "Bob Johnson",
     location: 40,
     password: 'Liverpool',
     avatar_img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU',
@@ -131,7 +129,7 @@ const seedUsers = [
     number_lent: 2,
   },
   {
-    name: "Emily White",
+    username: "Emily White",
     location: 30,
     password: 'Leeds',
     avatar_img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU',
@@ -141,7 +139,7 @@ const seedUsers = [
     number_lent: 2,
   },
   {
-    name: "Michael Brown",
+    username: "Michael Brown",
     location: 'Liverpool',
     password: "Fantasy",
     avatar_img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU',
@@ -151,7 +149,7 @@ const seedUsers = [
     number_lent: 2,
   },
   {
-    name: "Alice Green",
+    username: "Alice Green",
     location: 'Liverpool',
     password: "Dystopian",
     avatar_img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU',
@@ -161,7 +159,7 @@ const seedUsers = [
     number_lent: 2,
   },
   {
-    name: "David Black",
+    username: "David Black",
     location: 29,
     password: 'Leeds',
     avatar_img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU',
@@ -171,7 +169,7 @@ const seedUsers = [
     number_lent: 2,
   },
   {
-    name: "Sarah Blue",
+    username: "Sarah Blue",
     location: 'Liverpool',
     password: "Magical Realism",
     avatar_img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU',
