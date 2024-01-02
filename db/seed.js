@@ -126,7 +126,7 @@ const seedUsers = [
   {
     _id: new ObjectId('6594007551053b8f385697a5'),
     username: "Bob Johnson",
-    location: 40,
+    location: 'Liverpool',
     password: "Liverpool",
     avatar_img:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
@@ -138,7 +138,7 @@ const seedUsers = [
   {
     _id: new ObjectId('6594007551053b8f385697a6'),
     username: "Emily White",
-    location: 30,
+    location: 'Manchester',
     password: "Leeds",
     avatar_img:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
@@ -174,7 +174,7 @@ const seedUsers = [
   {
     _id: new ObjectId('6594007551053b8f385697a9'),
     username: "David Black",
-    location: 29,
+    location: 'London',
     password: "Leeds",
     avatar_img:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",

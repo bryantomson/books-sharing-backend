@@ -12,3 +12,8 @@ exports.selectUserById = async (id) => {
     return Promise.reject({ status: 404, msg: "user not found" });
   }
 };
+
+exports.selectUsers = async () => {
+  const users = await User.find({})
+  return users
+}
