@@ -1,6 +1,6 @@
 const express = require("express");
 const { getBooks } = require("./controllers/books.controller");
-const { handle500 } = require("./errors/errors");
+const { handle500, handle404, handle400 } = require("./errors/errors");
 const app = express();
 
 
@@ -10,7 +10,8 @@ app.use(express.json());
 
 
 app.get("/books", getBooks)
-
+app.use(handle400)
+app.use(handle404)
 app.use(handle500)
 
 
