@@ -47,9 +47,38 @@ describe("GET /books", () => {
         });
       });
   });
-  test('returns 400 not found when passed an invalid query ', () => {
+  test("accepts multiple queries query returns the appropriate books ", () => {
+    return request(app)
+      .get("/books?condition=New&genre=Fantasy")
+      .expect(200)
+      .then(({ body }) => {
+        const { books } = body;
+        expect(books).toHaveLength(1);
+        books.forEach((book) => {
+          expect(book.condition).toEqual("New")
+          expect(book.genre).toEqual("Fantasy");
+        });
+      });
+  });
+  test('returns 400 bad request when passed an invalid query ', () => {
     return request(app)
     .get("/books?dog=woof")
+    .expect(400)
+    .then(({body})=> {
+      expect(body.msg).toBe("bad request")
+    })
+  });
+  test('returns 400 bad request when at least one  query is invalid ', () => {
+    return request(app)
+    .get("/books?dog=woof&condition=New")
+    .expect(400)
+    .then(({body})=> {
+      expect(body.msg).toBe("bad request")
+    })
+  });
+  test('returns 404 not found whem  ', () => {
+    return request(app)
+    .get("/books?dog=woof&condition=New")
     .expect(400)
     .then(({body})=> {
       expect(body.msg).toBe("bad request")
