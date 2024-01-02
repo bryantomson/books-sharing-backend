@@ -10,6 +10,6 @@ const queries = req.query
     const books = await findBooks(queries)
  res.status(200).json({ books: books });
   } catch (err) {
-    res.status(err.status).json(err)
+    next(err)
   }
 }

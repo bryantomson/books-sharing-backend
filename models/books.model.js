@@ -23,13 +23,16 @@ exports.findBooks = async (queries) => {
     ...(isbn && { isbn }),
   };
 
-console.log(filters, queries, "queries")
-
-  if (!Object.keys(filters).length && Object.keys(queries).length) {
-    console.log(queries, "hello")
-    return Promise.reject({ status: 400, msg: "bad request" });
+for (const key in queries){
+  if (!filters.hasOwnProperty(key)){
+    return Promise.reject({ status: 400, msg: "bad request" })
   }
+}
 
   const books = await Book.find(filters);
-  return books;
+  if(!books.length){
+    return Promise.reject({status: 404, msg: 'not found'})
+  } else{
+    return books;
+  }
 };
