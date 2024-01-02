@@ -5,7 +5,7 @@ const app = express();
 
 app.use(express.json());
 
-app.get("/users/:id", getUserById);
+app.get("/api/users/:user_id", getUserById);
 
 app.use(handleCustomErrors);
 

@@ -11,7 +11,7 @@ afterAll(() => {
   db.close();
 });
 
-describe("/users/id", () => {
+describe("/api/users/:user_id", () => {
   test("GET:200 responds with a single user object", () => {
     const user = {
       _id: "6594007551053b8f385697a7",
@@ -27,7 +27,7 @@ describe("/users/id", () => {
     };
 
     return request(app)
-      .get("/users/6594007551053b8f385697a7")
+      .get("/api/users/6594007551053b8f385697a7")
       .expect(200)
       .then(({ body }) => {
         expect(body.user).toMatchObject(user);
@@ -35,7 +35,7 @@ describe("/users/id", () => {
   });
   test("GET:404 responds with an error if the id is valid but user doesn't exist", () => {
     return request(app)
-      .get("/users/6554007571753b8f385697b7")
+      .get("/api/users/6554007571753b8f385697b7")
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("user not found");
@@ -43,7 +43,7 @@ describe("/users/id", () => {
   });
   test("GET:400 responds with an error if the id is invalid", () => {
     return request(app)
-      .get("/users/banana")
+      .get("/api/users/banana")
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("bad request");
