@@ -9,7 +9,7 @@ const booksSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  owner: {
+  username: {
     type: String,
     required: true,
   },
@@ -24,6 +24,22 @@ const booksSchema = new mongoose.Schema({
   isbn: {
     type: String,
     required: true
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  condition: {
+    type: String,
+    required: true,
+  },
+  borrow_length: {
+    type: String,
+    required: true,
+  },
+  book_img: {
+    type: String,
+    required: false,
   }
 });
 
