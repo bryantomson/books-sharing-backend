@@ -2,6 +2,7 @@ const request = require("supertest");
 const app = require("../app.js");
 const db = require("../db/connection.js");
 const seed = require("../db/seed.js");
+const { ObjectId } = require("mongodb");
 
 beforeEach(() => {
   return seed();
@@ -32,6 +33,89 @@ describe("/api/users", () => {
             number_lent: expect.any(Number)
           });
         });
+      })
+
+  })
+  test("POST:201 responds with a new user object", ()=> {
+    const newUser ={
+      _id: new ObjectId("6594007551053b8f385697ab"),
+      username: "Bob Ross",
+      location: "Liverpool",
+      password: "Art",
+      avatar_img:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
+      bio: "hello my name is username",
+      
+    }
+    return request(app)
+    .post('/api/users')
+    .send(newUser)
+    .expect(201)
+    .then(({body})=>{
+      expect(body.user._id).toBe("6594007551053b8f385697ab")
+      expect(body.user.username).toBe('Bob Ross')
+      expect(body.user.location).toBe('Liverpool')
+      expect(body.user.password).toBe('Art')
+      expect(body.user.avatar_img).toBe("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU")
+      expect(body.user.bio).toBe('hello my name is username')
+      expect(body.user.rating).toBe(0)
+      expect(body.user.number_borrowed).toBe(0)
+      expect(body.user.number_lent).toBe(0)
+    })
+  })
+  test("POST:201 responds with a new user object if the request body does not contain the non required keys", () => {
+    const newUser = {
+      username: "Bob Ross",
+      location: "Liverpool",
+      password: "Art",
+    }
+    return request(app)
+      .post('/api/users')
+      .send(newUser)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.user.avatar_img).toBe("https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-avatar-vector-isolated-on-white-background-png-image_1694546.jpg")
+        expect(body.user.bio).toBe('')
+      })
+  })
+  test("POST:400 responds with an error message if username is missing", () => {
+    const newUser = {
+      location:'Liverpool',
+      password:'Art'
+    }
+    return request(app)
+    .post('/api/users')
+    .send(newUser)
+    .expect(400)
+    .then(({body})=> {
+      expect(body.msg).toBe('Path `username` is required.')
+    })
+    
+  })
+  test("POST:400 responds with an error message if password is missing", () => {
+    const newUser = {
+      username: 'Bob Ross',
+      location: 'Liverpool',
+    }
+    return request(app)
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Path `password` is required.')
+      })
+
+  })
+  test("POST:400 responds with an error message if more than one required fields are missing", () => {
+    const newUser = {
+      username: 'Bob Ross',
+    }
+    return request(app)
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Path `password` is required.')
       })
 
   })
