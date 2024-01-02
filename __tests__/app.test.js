@@ -14,7 +14,7 @@ afterAll(() => {
 describe("GET /books", () => {
   test("200: responds with an array of all books", () => {
     return request(app)
-      .get("/books")
+      .get("/api/books")
       .expect(200)
       .then(({ body }) => {
         const { books } = body;
@@ -37,7 +37,7 @@ describe("GET /books", () => {
   });
   test("accepts a query and returns the appropriate books ", () => {
     return request(app)
-      .get("/books?condition=New")
+      .get("/api/books?condition=New")
       .expect(200)
       .then(({ body }) => {
         const { books } = body;
@@ -49,7 +49,7 @@ describe("GET /books", () => {
   });
   test("accepts multiple queries query returns the appropriate books ", () => {
     return request(app)
-      .get("/books?condition=New&genre=Fantasy")
+      .get("/api/books?condition=New&genre=Fantasy")
       .expect(200)
       .then(({ body }) => {
         const { books } = body;
@@ -62,7 +62,7 @@ describe("GET /books", () => {
   });
   test('returns 400 bad request when passed an invalid query ', () => {
     return request(app)
-    .get("/books?dog=woof")
+    .get("/api/books?dog=woof")
     .expect(400)
     .then(({body})=> {
       expect(body.msg).toBe("bad request")
@@ -70,7 +70,7 @@ describe("GET /books", () => {
   });
   test('returns 400 bad request when at least one  query is invalid ', () => {
     return request(app)
-    .get("/books?dog=woof&condition=New")
+    .get("/api/books?dog=woof&condition=New")
     .expect(400)
     .then(({body})=> {
       expect(body.msg).toBe("bad request")
@@ -78,7 +78,7 @@ describe("GET /books", () => {
   });
   test('returns 404 not found whem  ', () => {
     return request(app)
-    .get("/books?dog=woof&condition=New")
+    .get("/api/books?dog=woof&condition=New")
     .expect(400)
     .then(({body})=> {
       expect(body.msg).toBe("bad request")
