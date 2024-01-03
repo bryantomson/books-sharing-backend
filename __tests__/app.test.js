@@ -14,11 +14,11 @@ afterAll(() => {
 describe("/api/users", () => {
   test("GET:200 responds with an array with all users", () => {
     return request(app)
-      .get('/api/users')
+      .get("/api/users")
       .expect(200)
       .then(({ body }) => {
-        const users = body.users
-        expect(users.length).toBe(8)
+        const users = body.users;
+        expect(users.length).toBe(8);
         users.forEach((user) => {
           expect(user).toMatchObject({
             _id: expect.any(String),
@@ -29,13 +29,12 @@ describe("/api/users", () => {
             bio: expect.any(String),
             rating: expect.any(Number),
             number_borrowed: expect.any(Number),
-            number_lent: expect.any(Number)
+            number_lent: expect.any(Number),
           });
         });
-      })
-
-  })
-})
+      });
+  });
+});
 
 describe("/api/users/:user_id", () => {
   test("GET:200 responds with a single user object", () => {
@@ -79,22 +78,21 @@ describe("/api/users/:user_id", () => {
 
 describe("GET /books/:id", () => {
   test("200: responds with a single book by given id", () => {
-
-    const expectedBook = 
-    {
-      _id: '6593f8b7fdb38e563114965f',
+    const expectedBook = {
+      _id: "6593f8b7fdb38e563114965f",
       title: "The Hitchhiker's Guide to the Galaxy",
-      author: 'Douglas Adams',
-      username: 'John Doe',
-      published_date: '1979-10-12',
-      genre: 'Science Fiction',
-      isbn: '978-0-345-39180-3',
-      description: 'A nice book',
-      condition: 'Old',
-      borrow_length: '2 weeks',
-      book_img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU',
-      __v: 0
-    }
+      author: "Douglas Adams",
+      username: "John Doe",
+      published_date: "1979-10-12",
+      genre: "Science Fiction",
+      isbn: "978-0-345-39180-3",
+      description: "A nice book",
+      condition: "Old",
+      borrow_length: "2 weeks",
+      book_img:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU",
+      __v: 0,
+    };
 
     return request(app)
       .get("/books/6593f8b7fdb38e563114965f")
@@ -105,21 +103,19 @@ describe("GET /books/:id", () => {
       });
   });
   test("404: responds with error if book id does not exist", () => {
-
     return request(app)
       .get("/books/6593f8b7fdb38e563114965h")
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe('book not found')
+        expect(body.msg).toBe("book not found");
       });
   });
   test("400: responds with error if book id does not exist", () => {
-
     return request(app)
       .get("/books/doesnotexist")
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe('bad request')
+        expect(body.msg).toBe("bad request");
       });
   });
 });
@@ -180,34 +176,46 @@ describe("GET /books", () => {
         const { books } = body;
         expect(books).toHaveLength(1);
         books.forEach((book) => {
-          expect(book.condition).toEqual("New")
+          expect(book.condition).toEqual("New");
           expect(book.genre).toEqual("Fantasy");
         });
       });
   });
-  test('returns 400 bad request when passed an invalid query ', () => {
+  test("returns 400 bad request when passed an invalid query ", () => {
     return request(app)
-    .get("/api/books?dog=woof")
-    .expect(400)
-    .then(({body})=> {
-      expect(body.msg).toBe("bad request")
-    })
+      .get("/api/books?dog=woof")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
   });
-  test('returns 400 bad request when at least one  query is invalid ', () => {
+  test("returns 400 bad request when at least one  query is invalid ", () => {
     return request(app)
-    .get("/api/books?dog=woof&condition=New")
-    .expect(400)
-    .then(({body})=> {
-      expect(body.msg).toBe("bad request")
-    })
+      .get("/api/books?dog=woof&condition=New")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
   });
-  test('returns 404 not found whem  ', () => {
+  test("returns 404 not found whem  ", () => {
     return request(app)
-    .get("/api/books?dog=woof&condition=New")
-    .expect(400)
-    .then(({body})=> {
-      expect(body.msg).toBe("bad request")
-    })
+      .get("/api/books?dog=woof&condition=New")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
   });
 });
 
+describe("GET /books by genre", () => {
+  test("200: responds with all genres", () => {
+    return request(app)
+      .get("/api/genres")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body[0]["genre"]).toEqual("Mystery");
+        expect(body[1]["genre"]).toEqual("Science Fiction");
+        expect(body[2]["genre"]).toEqual("Dystopian");
+      });
+  });
+});
