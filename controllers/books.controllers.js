@@ -1,4 +1,4 @@
-const { selectSingleBook, findBooks } = require("../models/books.models");
+const { selectSingleBook, findBooks, addBook } = require("../models/books.models");
 
 exports.getBookById = (req, res, next) => {
   const paramId = req.params.id;
@@ -21,3 +21,10 @@ exports.getBooks = (req, res, next) => {
       })
       .catch(next);
   };
+
+  exports.postBook =(req,res,next)=>{
+    const {body} = req
+addBook(body).then((book)=>{
+  res.status(201).send({book})
+}).catch(next)
+  }
