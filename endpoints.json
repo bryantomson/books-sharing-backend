@@ -1,32 +1,48 @@
-
 {
+  "GET /api/users/:user_id": {
+    "description": "serves a single user object with the requested user ID",
+    "queries": [],
+    "exampleResponse": {
+      "user": {
+        "_id": "6594007551053b8f385697a7",
+        "username": "Michael Brown",
+        "location": "Liverpool",
+        "password": "Fantasy",
+        "avatar_img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
+        "bio": "hello my name is username",
+        "rating": 0,
+        "number_borrowed": 1,
+        "number_lent": 2
+      }
+    }
+  },
   "GET /api/books": {
     "description": "serves an array of all books",
-    "queries": ["username",
-    "author",
-    "title",
-    "genre",
-    "published_date",
-    "condition",
-    "borrow_length",
-    "isbn"
-],
+    "queries": [
+      "username",
+      "author",
+      "title",
+      "genre",
+      "published_date",
+      "condition",
+      "borrow_length",
+      "isbn"
+    ],
     "exampleResponse": {
       "book": {
-        
-            "_id": "new ObjectId('65943ae82e3aabceb0fc43c3')",
-            "title": "The Catcher in the Rye",
-            "author": "J.D. Salinger",
-            "username": "David Black",
-            "published_date": "1951-07-16",
-            "genre": "Coming-of-location",
-            "isbn": "978-0-316-76948-0",
-            "description": "A nice book",
-            "condition": "New",
-            "borrow_length": "1 week",
-            "book_img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU",
-            "__v": "0"
-          }
+        "_id": "new ObjectId('65943ae82e3aabceb0fc43c3')",
+        "title": "The Catcher in the Rye",
+        "author": "J.D. Salinger",
+        "username": "David Black",
+        "published_date": "1951-07-16",
+        "genre": "Coming-of-location",
+        "isbn": "978-0-316-76948-0",
+        "description": "A nice book",
+        "condition": "New",
+        "borrow_length": "1 week",
+        "book_img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU",
+        "__v": "0"
       }
     }
   }
+}

@@ -1,6 +1,6 @@
 const request = require("supertest");
-const { app } = require("../app.js");
-const db = require("../db/connection.js")
+const app = require("../app.js");
+const db = require("../db/connection.js");
 const seed = require("../db/seed.js");
 
 beforeEach(() => {
@@ -11,24 +11,45 @@ afterAll(() => {
   db.close();
 });
 
-// describe("GET /books", () => {
-//   test("200: responds with an array of topics", () => {
-//     return request(app)
-//       .get("/books")
-//       .expect(200)
-//       .then(({ body }) => {
-//         const { books } = body;
-//         expect(books[0]).toMatchObject({
-//           title: "The Hitchhiker's Guide to the Galaxy",
-//           author: "Douglas Adams",
-//           owner: "John Doe",
-//           published_date: "1979-10-12",
-//           genre: "Science Fiction",
-//           isbn: "978-0-345-39180-3",
-//         });
-//       });
-//   });
-// });
+describe("/api/users/:user_id", () => {
+  test("GET:200 responds with a single user object", () => {
+    const user = {
+      _id: "6594007551053b8f385697a7",
+      username: "Michael Brown",
+      location: "Liverpool",
+      password: "Fantasy",
+      avatar_img:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
+      bio: "hello my name is username",
+      rating: 0,
+      number_borrowed: 1,
+      number_lent: 2,
+    };
+
+    return request(app)
+      .get("/api/users/6594007551053b8f385697a7")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.user).toMatchObject(user);
+      });
+  });
+  test("GET:404 responds with an error if the id is valid but user doesn't exist", () => {
+    return request(app)
+      .get("/api/users/6554007571753b8f385697b7")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("user not found");
+      });
+  });
+  test("GET:400 responds with an error if the id is invalid", () => {
+    return request(app)
+      .get("/api/users/banana")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+});
 
 describe("GET /books/:id", () => {
   test("200: responds with a single book by given id", () => {
