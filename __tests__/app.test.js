@@ -275,6 +275,32 @@ describe("/api/users/:user_id", () => {
         expect(body.user).toMatchObject(expectedResponse);
       });
   });
+  test("PATCH:200 updates multiple properties for an existing user", () => {
+    const update = {
+      newLocation: "Liverpool",
+      newPassword: "hjkjklokdfosjofds6783628173892",
+    };
+    const expectedResponse = {
+      _id: "6594007551053b8f385697a3",
+      username: "John Doe",
+      location: "Liverpool",
+      password: "hjkjklokdfosjofds6783628173892",
+      avatar_img:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
+      bio: "hello my name is username",
+      rating: 0,
+      number_borrowed: 1,
+      number_lent: 2,
+    };
+
+    return request(app)
+      .patch("/api/users/6594007551053b8f385697a3")
+      .send(update)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.user).toMatchObject(expectedResponse);
+      });
+  });
   test("PATCH:404 responds with an error if the id is valid but user doesn't exist", () => {
     const update = {
       incrementLent: 1,
