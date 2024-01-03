@@ -32,7 +32,7 @@ exports.findBooks = (queries) => {
   };
 
   for (const key in queries) {
-    if (!filters.hasOwnProperty(key) && !filters.hasOwnProperty("$text")) {
+    if (!filters.hasOwnProperty(key) && key !== "search") {
       return Promise.reject({ status: 400, msg: "bad request" });
     }
   }
