@@ -11,6 +11,32 @@ afterAll(() => {
   db.close();
 });
 
+describe("/api/users", () => {
+  test("GET:200 responds with an array with all users", () => {
+    return request(app)
+      .get('/api/users')
+      .expect(200)
+      .then(({ body }) => {
+        const users = body.users
+        expect(users.length).toBe(8)
+        users.forEach((user) => {
+          expect(user).toMatchObject({
+            _id: expect.any(String),
+            username: expect.any(String),
+            location: expect.any(String),
+            password: expect.any(String),
+            avatar_img: expect.any(String),
+            bio: expect.any(String),
+            rating: expect.any(Number),
+            number_borrowed: expect.any(Number),
+            number_lent: expect.any(Number)
+          });
+        });
+      })
+
+  })
+})
+
 describe("/api/users/:user_id", () => {
   test("GET:200 responds with a single user object", () => {
     const user = {

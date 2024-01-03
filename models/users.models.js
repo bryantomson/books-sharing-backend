@@ -13,3 +13,9 @@ exports.selectUserById = (id) => {
     }
   });
 };
+
+exports.selectUsers = () => {
+  return User.find({}).then((users) => {
+    return users;
+  });
+};
