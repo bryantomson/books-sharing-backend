@@ -79,7 +79,7 @@ const seedBooks = [
       genre: "Coming-of-location",
       isbn: "978-0-316-76948-0",
       description: 'A nice book',
-      condition: 'new',
+      condition: 'New',
       borrow_length: '1 week',
       book_img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU',
       

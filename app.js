@@ -1,9 +1,10 @@
+
 const {
   getBookById
 } = require("./controllers/books.controllers");
-const {handleCustomErrors, handleServerErrors} = require('./errors/errors')
-
 const express = require("express");
+const { getBooks } = require("./controllers/books.controller");
+const { handle500, handle404, handle400, handleCustomErrors, handleServerErrors } = require("./errors/errors");
 const app = express();
 
 
@@ -36,6 +37,16 @@ app.use(handleServerErrors)
 //     res.json({ msg: "ERR" });
 //   }
 // });
+
+
+
+
+
+app.get("/api/books", getBooks)
+app.use(handle400)
+app.use(handle404)
+app.use(handle500)
+
 
 // app.get("/owners", async (req, res) => {
 //   const { name } = req.query;
