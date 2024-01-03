@@ -1,15 +1,12 @@
 const Book = require("../db/schema/book-schema");
 const { findBooks } = require("../models/books.model");
 
-exports.getBooks = async (req, res, next) => {
+exports.getBooks = (req, res, next) => {
+  const queries = req.query;
 
-const queries = req.query
-
-
-  try {
-    const books = await findBooks(queries)
- res.status(200).json({ books: books });
-  } catch (err) {
-    next(err)
-  }
-}
+  findBooks(queries)
+    .then((books) => {
+      res.status(200).send({ books: books });
+    })
+    .catch(next);
+};

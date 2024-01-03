@@ -1,6 +1,7 @@
 const Book = require("../db/schema/book-schema");
 
-exports.findBooks = async (queries) => {
+exports.findBooks =  (queries) => {
+
   const {
     username,
     author,
@@ -13,14 +14,18 @@ exports.findBooks = async (queries) => {
   } = queries;
 
   const filters = {
-    ...(author && { author }),
-    ...(username && { username }),
-    ...(title && { title }),
-    ...(genre && { genre }),
-    ...(published_date && { published_date }),
-    ...(condition && { condition }),
-    ...(borrow_length && { borrow_length }),
-    ...(isbn && { isbn }),
+    ...(author && { author: { $regex: `^${author}$`, $options: "i" } }),
+    ...(username && { username: { $regex: `^${username}$`, $options: "i" } }),
+    ...(title && { title: { $regex: `^${title}$`, $options: "i" } }),
+    ...(genre && { genre: { $regex: `^${genre}$`, $options: "i" } }),
+    ...(published_date && {
+      published_date: { $regex: `^${published_date}$`, $options: "i" },
+    }),
+    ...(condition && { condition: { $regex: `^${condition}$`, $options: "i" } }),
+    ...(borrow_length && {
+      borrow_length: { $regex: `^${borrow_length}$`, $options: "i" },
+    }),
+    ...(isbn && { isbn: { $regex: `^${isbn}$`, $options: "i" } }),
   };
 
 for (const key in queries){
@@ -29,10 +34,12 @@ for (const key in queries){
   }
 }
 
-  const books = await Book.find(filters);
-  if(!books.length){
+return Book.find(filters).then((res)=> {
+    if(!res.length){
     return Promise.reject({status: 404, msg: 'not found'})
   } else{
-    return books;
+    return res;
   }
+ }).catch((next)=>{
+ })
 };

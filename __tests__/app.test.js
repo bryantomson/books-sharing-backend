@@ -37,7 +37,7 @@ describe("GET /books", () => {
   });
   test("accepts a query and returns the appropriate books ", () => {
     return request(app)
-      .get("/api/books?condition=New")
+      .get("/api/books?condition=new")
       .expect(200)
       .then(({ body }) => {
         const { books } = body;
@@ -47,9 +47,21 @@ describe("GET /books", () => {
         });
       });
   });
+  test("accepts a username query and returns the books listed by that user ", () => {
+    return request(app)
+      .get("/api/books?username=Sarah%20blue")
+      .expect(200)
+      .then(({ body }) => {
+        const { books } = body;
+        expect(books).toHaveLength(1);
+        books.forEach((book) => {
+          expect(book.username).toEqual("Sarah Blue");
+        });
+      });
+  });
   test("accepts multiple queries query returns the appropriate books ", () => {
     return request(app)
-      .get("/api/books?condition=New&genre=Fantasy")
+      .get("/api/books?condition=New&genre=fantasy")
       .expect(200)
       .then(({ body }) => {
         const { books } = body;
