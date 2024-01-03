@@ -26,7 +26,8 @@
       "published_date",
       "condition",
       "borrow_length",
-      "isbn"
+      "isbn",
+      "search"
     ],
     "exampleResponse": {
       "books": [
@@ -45,6 +46,28 @@
           "__v": "0"
         }
       ]
+    },
+    "POST /api/books":{
+      "description": "posts a new Book to an array of books",
+      "queries": [],
+      "exampleResponse": {
+        "book": [
+          {
+           "title": "Harry Potter and the Chamber of Secrets",
+            "author": "J. K. Rowling",
+            "username": "Beatrizzzz",
+            "published_date": "1998-05-30",
+            "genre": "Magical Realism",
+            "isbn": "978-0-06-142019-1",
+            "description": "A short sweet book",
+            "condition": "New",
+            "borrow_length": "5 weeks",
+            "book_img": "'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Book_missing.svg/595px-Book_missing.svg.png'",
+            "_id": "new ObjectId('6595833ed1fcbf9048c7aa93')",
+            "__v": 0
+          }
+        ]
+      }
     },
     "GET /api/users": {
       "description": "serves an array of all users",
