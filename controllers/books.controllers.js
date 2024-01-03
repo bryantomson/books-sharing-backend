@@ -1,6 +1,6 @@
 const {
     selectSingleBook,
-} = require("../models/book.models");
+} = require("../models/books.models");
 
 exports.getBookById = (req, res,next) => {
     const paramId = req.params.id
