@@ -34,5 +34,29 @@
         }
       ]
     }
+  },
+  "POST /api/users": {
+    "description": "creates a new user",
+    "queries": [],
+    "exampleRequestBody": {
+      "username": "Bob Ross",
+      "location": "Liverpool",
+      "password": "Fantasy",
+      "avatar_img": "(not required default image provided)",
+      "bio": "(not required empty string if not present in the body)"
+    },
+    "exampleResponse": {
+      "user": {
+        "_id": "6594007551053b8f385697ab",
+        "username": "Bob Ross",
+        "location": "Liverpool",
+        "password": "Fantasy",
+        "avatar_img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
+        "bio": "",
+        "rating": 0,
+        "number_borrowed": 0,
+        "number_lent": 0
+      }
+    }
   }
 }

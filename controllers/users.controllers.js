@@ -17,11 +17,23 @@ exports.getUsers = (req, res, next) => {
     .catch(next);
 }
 
-exports.postUser = (req, res, next) =>{
+exports.postUser = (req, res, next) => {
   const newUser = req.body
-  addUser(newUser)
-  .then((user)=> {
-    res.status(201).send({user})
+  const newUsername = new RegExp(`^${newUser.username}$`, 'i')
+  selectUsers().then((users) => {
+    const usernames = users.map((user) => {
+      return user.username
+    })
+    const usernameExists = usernames.some(username => newUsername.test(username))
+    if (usernameExists) {
+      return Promise.reject({ status: 400, msg: 'username already in use' })
+    }
   })
-  .catch(next)
+    .then(() => {
+      return addUser(newUser)
+    })
+    .then((user) => {
+      res.status(201).send({ user })
+    })
+    .catch(next)
 }
