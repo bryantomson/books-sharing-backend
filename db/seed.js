@@ -1,101 +1,102 @@
-const Book = require("./schema/book-schema.js");
-const User = require("./schema/user-schema.js");
-const Message = require("./schema/message-schema.js");
-const Genre = require("./schema/genre-schema.js");
 const { ObjectId } = require("mongodb");
+const Book = require("./schema/book-schema.js")
+const User = require("./schema/user-schema.js")
+const Message = require('./schema/message-schema.js')
+const Genre = require('./schema/genre-schema.js')
 
 const seedBooks = [
-  {
-    title: "A Hitchhiker's Guide to the Galaxy",
-    username: "John Doe",
-    author: "Douglas Adams",
-    published_date: "1979-10-12",
-    genre: "Science Fiction",
-    isbn: "978-0-345-39180-3",
-    description: "A nice book",
-    condition: "Old",
-    borrow_length: "2 weeks",
-    book_img:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU",
-  },
-  {
-    title: "The Great Gatsby",
-    username: "Bob Johnson",
-    author: "F. Scott Fitzgerald",
-    published_date: "1925-04-10",
-    genre: "Classic",
-    isbn: "978-0-7432-7356-5",
-    description: "A nice book",
-    condition: "New",
-    borrow_length: "1 week",
-    book_img:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU",
-  },
-  {
-    title: "Harry Potter and the Sorcerer's Stone",
-    username: "Emily White",
-    author: "J.K. Rowling",
-    published_date: "1997-06-26",
-    genre: "Fantasy",
-    isbn: "978-0-590-35340-3",
-    description: "A nice book",
-    condition: "Old",
-    borrow_length: "2 weeks",
-    book_img:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU",
-  },
-  {
-    title: "The Hobbit",
-    username: "Michael Brown",
-    author: "J.R.R. Tolkien",
-    published_date: "1937-09-21",
-    genre: "Fantasy",
-    isbn: "978-0-261-10295-2",
-    description: "A nice book",
-    condition: "New",
-    borrow_length: "1 week",
-    book_img:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU",
-  },
-  {
-    title: "1984",
-    username: "Alice Green",
-    author: "George Orwell",
-    published_date: "1949-06-08",
-    genre: "Dystopian",
-    isbn: "978-0-452-28423-4",
-    description: "A nice book",
-    condition: "Old",
-    borrow_length: "2 weeks",
-    book_img:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU",
-  },
-  {
-    title: "The Catcher in the Rye",
-    username: "David Black",
-    author: "J.D. Salinger",
-    published_date: "1951-07-16",
-    genre: "Coming-of-location",
-    isbn: "978-0-316-76948-0",
-    description: "A nice book",
-    condition: "new",
-    borrow_length: "1 week",
-    book_img:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU",
-  },
-  {
-    title: "One Hundred Years of Solitude",
-    username: "Sarah Blue",
-    author: "Gabriel Garcia Marquez",
-    published_date: "1967-05-30",
-    genre: "Magical Realism",
-    isbn: "978-0-06-112009-1",
-    description: "A nice book",
-    condition: "Old",
-    borrow_length: "2 weeks",
-    book_img:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU",
-  },
+    {
+      _id: new ObjectId("6593f8b7fdb38e563114965f"),
+      title: "The Hitchhiker's Guide to the Galaxy",
+      username: "John Doe",
+      author: "Douglas Adams",
+      published_date: "1979-10-12",
+      genre: "Science Fiction",
+      isbn: "978-0-345-39180-3",
+      description: 'A nice book',
+      condition: 'Old',
+      borrow_length: '2 weeks',
+      book_img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU',
+      
+    },
+    {
+      title: "The Great Gatsby",
+      username: "Bob Johnson",
+      author: "F. Scott Fitzgerald",
+      published_date: "1925-04-10",
+      genre: "Classic",
+      isbn: "978-0-7432-7356-5",
+      description: 'A nice book',
+      condition: 'New',
+      borrow_length: '1 week',
+      book_img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU',
+      
+    },
+    {
+      title: "Harry Potter and the Sorcerer's Stone",
+      username: "Emily White",
+      author: "J.K. Rowling",
+      published_date: "1997-06-26",
+      genre: "Fantasy",
+      isbn: "978-0-590-35340-3",
+      description: 'A nice book',
+      condition: 'Old',
+      borrow_length: '2 weeks',
+      book_img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU',
+      
+    },
+    {
+      title: "The Hobbit",
+      username: "Michael Brown",
+      author: "J.R.R. Tolkien",
+      published_date: "1937-09-21",
+      genre: "Fantasy",
+      isbn: "978-0-261-10295-2",
+      description: 'A nice book',
+      condition: 'New',
+      borrow_length: '1 week',
+      book_img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU',
+      
+    },
+    {
+      title: "1984",
+      username: "Alice Green",
+      author: "George Orwell",
+      published_date: "1949-06-08",
+      genre: "Dystopian",
+      isbn: "978-0-452-28423-4",
+      description: 'A nice book',
+      condition: 'Old',
+      borrow_length: '2 weeks',
+      book_img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU',
+      
+    },
+    {
+      title: "The Catcher in the Rye",
+      username: "David Black",
+      author: "J.D. Salinger",
+      published_date: "1951-07-16",
+      genre: "Coming-of-location",
+      isbn: "978-0-316-76948-0",
+      description: 'A nice book',
+      condition: 'New',
+      borrow_length: '1 week',
+      book_img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU',
+      
+    },
+    {
+      title: "One Hundred Years of Solitude",
+      username: "Sarah Blue",
+      author: "Gabriel Garcia Marquez",
+      published_date: "1967-05-30",
+      genre: "Magical Realism",
+      isbn: "978-0-06-112009-1",
+      description: 'A nice book',
+      condition: 'Old',
+      borrow_length: '2 weeks',
+      book_img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU',
+      
+    }  
 ];
 
 const seedUsers = [

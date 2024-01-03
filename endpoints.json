@@ -15,5 +15,34 @@
         "number_lent": 2
       }
     }
+  },
+  "GET /api/books": {
+    "description": "serves an array of all books",
+    "queries": [
+      "username",
+      "author",
+      "title",
+      "genre",
+      "published_date",
+      "condition",
+      "borrow_length",
+      "isbn"
+    ],
+    "exampleResponse": {
+      "book": {
+        "_id": "new ObjectId('65943ae82e3aabceb0fc43c3')",
+        "title": "The Catcher in the Rye",
+        "author": "J.D. Salinger",
+        "username": "David Black",
+        "published_date": "1951-07-16",
+        "genre": "Coming-of-location",
+        "isbn": "978-0-316-76948-0",
+        "description": "A nice book",
+        "condition": "New",
+        "borrow_length": "1 week",
+        "book_img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU",
+        "__v": "0"
+      }
+    }
   }
 }
