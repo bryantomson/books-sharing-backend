@@ -1,4 +1,4 @@
-const { getGenres } = require("./controllers/app.controllers");
+const { getGenres } = require("./controllers/genres.controllers");
 const express = require("express");
 const app = express();
 
