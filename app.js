@@ -1,4 +1,4 @@
-const { getGenres } = require("./controllers/app.controller");
+const { getGenres } = require("./controllers/app.controllers");
 const express = require("express");
 const app = express();
 
@@ -25,7 +25,7 @@ app.get("/books", async (req, res) => {
   }
 });
 
-app.get("/genres", getGenres)
+app.get("/api/genres", getGenres)
 
 app.get("/owners", async (req, res) => {
   const { name } = req.query;
