@@ -1,10 +1,43 @@
+
+const {
+  getBookById
+} = require("./controllers/books.controllers");
 const express = require("express");
 const { getBooks } = require("./controllers/books.controller");
-const { handle500, handle404, handle400 } = require("./errors/errors");
+const { handle500, handle404, handle400, handleCustomErrors, handleServerErrors } = require("./errors/errors");
 const app = express();
 
 
 app.use(express.json());
+
+app.get("/books/:id", getBookById)
+
+app.use(handleCustomErrors)
+app.use(handleServerErrors)
+
+
+
+
+// app.get("/books", async (req, res) => {
+
+//   const { owner, author, title, genre } = req.query;
+//   const filters = {
+//     ...(author && { author }),
+//     ...(owner && { owner }),
+//     ...(title && { title }),
+//     ...(genre && { genre }),
+//   };
+
+//   console.log(filters);
+
+//   try {
+//     const books = await Book.find(filters);
+//     res.json({ books: books });
+//   } catch (err) {
+//     res.json({ msg: "ERR" });
+//   }
+// });
+
 
 
 

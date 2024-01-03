@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 const Book = require("./schema/book-schema.js")
 const User = require("./schema/user-schema.js")
 const Message = require('./schema/message-schema.js')
@@ -5,7 +6,8 @@ const Genre = require('./schema/genre-schema.js')
 
 const seedBooks = [
     {
-      title: "A Hitchhiker's Guide to the Galaxy",
+      _id: new ObjectId("6593f8b7fdb38e563114965f"),
+      title: "The Hitchhiker's Guide to the Galaxy",
       username: "John Doe",
       author: "Douglas Adams",
       published_date: "1979-10-12",
