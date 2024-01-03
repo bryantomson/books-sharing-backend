@@ -1,4 +1,4 @@
-
+const { getGenres } = require("./controllers/app.controller");
 const express = require("express");
 const app = express();
 
@@ -24,6 +24,8 @@ app.get("/books", async (req, res) => {
     res.json({ msg: "ERR" });
   }
 });
+
+app.get("/genres", getGenres)
 
 app.get("/owners", async (req, res) => {
   const { name } = req.query;
