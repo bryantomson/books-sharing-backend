@@ -45,24 +45,52 @@
           "__v": "0"
         }
       ]
+    }
+  },
+  "GET /api/users": {
+    "description": "serves an array of all users",
+    "queries": [],
+    "exampleResponse": {
+      "users": [
+        {
+          "_id": "6594007551053b8f385697a7",
+          "username": "Michael Brown",
+          "location": "Liverpool",
+          "password": "Fantasy",
+          "avatar_img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
+          "bio": "hello my name is username",
+          "rating": 0,
+          "number_borrowed": 1,
+          "number_lent": 2
+        }
+      ]
+    }
+  },
+  "PATCH /api/users/:user_id": {
+    "description": "patches an existing user object with the requested user ID, responds with the updated user object",
+    "validRequestBodyProperties": [
+      "newLocation",
+      "newPassword",
+      "newAvatar",
+      "newBio",
+      "incrementRating",
+      "incrementBorrowed",
+      "incrementLent"
+    ],
+    "exampleRequestBody": {
+      "newLocation": "Liverpool"
     },
-    "GET /api/users": {
-      "description": "serves an array of all users",
-      "queries": [],
-      "exampleResponse": {
-        "users": [
-          {
-            "_id": "6594007551053b8f385697a7",
-            "username": "Michael Brown",
-            "location": "Liverpool",
-            "password": "Fantasy",
-            "avatar_img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
-            "bio": "hello my name is username",
-            "rating": 0,
-            "number_borrowed": 1,
-            "number_lent": 2
-          }
-        ]
+    "exampleResponse": {
+      "user": {
+        "_id": "6594007551053b8f385697a3",
+        "username": "John Doe",
+        "location": "Liverpool",
+        "password": "Science Fiction",
+        "avatar_img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
+        "bio": "hello my name is username",
+        "rating": 0,
+        "number_borrowed": 1,
+        "number_lent": 2
       }
     }
   }
