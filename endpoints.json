@@ -93,5 +93,16 @@
         "number_lent": 2
       }
     }
+  },
+  "GET /api/genres": {
+    "description": "serves an array of all genres",
+    "queries": [],
+    "exampleResponse": {
+      "genres": {
+        "_id": "new ObjectId('65943ae82e3aabceb0fc43c3')",
+        "genre": "Coming-of-location",
+        "__v": "0"
+      }
+    }
   }
 }
