@@ -1,24 +1,27 @@
 const User = require("../db/schema/user-schema");
 
-exports.selectUserById = async (id) => {
+exports.selectUserById = (id) => {
   if (id.length !== 24) {
     return Promise.reject({ status: 400, msg: "bad request" });
   }
 
-  const user = await User.findById(id);
-  if (user) {
-    return user;
-  } else {
-    return Promise.reject({ status: 404, msg: "user not found" });
-  }
+  return User.findById(id).then((user) => {
+    if (user) {
+      return user;
+    } else {
+      return Promise.reject({ status: 404, msg: "user not found" });
+    }
+  });
 };
 
-exports.selectUsers = async () => {
-  const users = await User.find({})
-  return users
+exports.selectUsers = () => {
+  return User.find({}).then((users)=> {
+    return users
+  }) 
+  
 }
 
-exports.addUser = async (newUser) => {
+exports.addUser = (newUser) => {
   
   newUser.rating = 0
   newUser.number_borrowed = 0
@@ -30,6 +33,8 @@ exports.addUser = async (newUser) => {
     newUser.bio = ''
   }
   const user = new User(newUser);
-  await user.save();
-  return user
+  return user.save().then(()=> {
+    return user
+  })
+  
 }
