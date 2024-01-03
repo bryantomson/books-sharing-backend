@@ -219,3 +219,31 @@ describe("GET /books by genre", () => {
       });
   });
 });
+
+describe("/api/genres", () => {
+  test("POST 201: responds with new genre", () => {
+    const newGenre = {
+      genre: "Horror"
+    }
+
+    return request(app)
+      .post("/api/genres")
+      .send(newGenre)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.genre.genre).toBe('Horror')
+      })
+  })
+  test("POST:400: respods with an error message if genre is missing", () => {
+    const newGenre = {}
+
+    return request(app)
+      .post('/api/genres')
+      .send(newGenre)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Path `genre` is required.")
+      })
+  })
+
+})

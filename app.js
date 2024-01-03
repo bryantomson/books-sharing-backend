@@ -1,8 +1,8 @@
-const { getGenres } = require("./controllers/genres.controllers");
+const { getGenres, postGenres } = require("./controllers/genres.controllers");
 const express = require("express");
 const { getUsers, getUserById } = require("./controllers/users.controllers");
 const { getBookById, getBooks } = require("./controllers/books.controllers");
-const { handleCustomErrors, handleServerErrors } = require("./errors/errors");
+const { handleCustomErrors, handleServerErrors, handleMongoErrors } = require("./errors/errors");
 const app = express();
 
 app.use(express.json());
@@ -17,7 +17,10 @@ app.get("/books/:id", getBookById);
 
 app.get("/api/genres", getGenres);
 
+app.post("/api/genres", postGenres)
+
 app.use(handleCustomErrors);
+app.use(handleMongoErrors);
 app.use(handleServerErrors);
 
 module.exports = app;
