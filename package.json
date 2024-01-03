@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "nodemon listen.js",
     "test": "jest --detectOpenHandles",
-    "seed": "node ./db/run-seed.js"
+    "seed": "node ./db/run-seed.js",
+        "seed-prod": "NODE_ENV=production npm run seed"
+
   },
   "keywords": [],
   "author": "",
