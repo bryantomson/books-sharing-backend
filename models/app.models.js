@@ -6,6 +6,6 @@ exports.selectGenre = () => {
         return result
     })
     .catch((error) => {
-        return Promise.reject({ status: 400, msg: 'does not exist' })
+        return Promise.reject({ status: 404, msg: 'Not Found' })
     });
 };

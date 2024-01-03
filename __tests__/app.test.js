@@ -13,9 +13,9 @@ afterAll(() => {
 });
 
 describe("GET /books by genre", () => {
-  test("200: responds with an array of books witin a specific genre", () => {
+  test("200: responds with all genres", () => {
     return request(app)
-      .get("/genres")
+      .get("/api/genres")
       .expect(200)
       .then(({ body }) => {
         expect(body[0]["genre"]).toEqual("Mystery");
