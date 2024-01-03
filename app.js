@@ -1,6 +1,6 @@
 const {
   getBookById
-} = require("./controller/app.controller");
+} = require("./controllers/book.controllers");
 const {handleCustomErrors, handleServerErrors} = require('./errors/errors')
 
 const express = require("express");

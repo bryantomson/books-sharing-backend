@@ -61,10 +61,19 @@ describe("GET /books/:id", () => {
   test("404: responds with error if book id does not exist", () => {
 
     return request(app)
-      .get("/books/6393f8b7fdb38e163114965h")
+      .get("/books/6593f8b7fdb38e563114965h")
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe('does not exist')
+        expect(body.msg).toBe('book not found')
+      });
+  });
+  test("400: responds with error if book id does not exist", () => {
+
+    return request(app)
+      .get("/books/doesnotexist")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('bad request')
       });
   });
 });
