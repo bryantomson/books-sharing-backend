@@ -261,7 +261,7 @@ const seedDB = async () => {
   await User.insertMany(seedUsers);
   await Message.insertMany(seedMessages);
   await Genre.insertMany(seedGenres);
-  await Book.createIndexes({ "title": "text", "username": "text","author": "text", "published_date": "text", "genre": "text", "isbn": "text", "description": "text", "condition": "text", "borrow_length": "text", })
+  await Book.createIndexes({ "title": "text", "username": "text","author": "text", "published_date": "text", "genre": "text", "isbn": "text", "description": "text", "condition": "text", "borrow_length": "text" })
 };
 
 module.exports = seedDB;

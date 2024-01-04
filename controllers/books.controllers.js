@@ -1,6 +1,4 @@
 
-const Book = require("../db/schema/book-schema");
-const { findBooks } = require("../models/books.models");
     
 const {
   selectSingleBook,
@@ -29,7 +27,10 @@ exports.getBooks = (req, res, next) => {
       .then((books) => {
         res.status(200).send({ books: books });
       })
-      .catch(next);
+      .catch((err)=>{
+console.log(err);
+next(err)
+      });
   };
 
   exports.deleteBookById = (req, res, next) => {
