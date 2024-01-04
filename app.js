@@ -1,4 +1,4 @@
-const { getGenres } = require("./controllers/genres.controllers");
+const { getGenres, postGenres } = require("./controllers/genres.controllers");
 const express = require("express");
 const { getUsers, getUserById, patchUser, postUser, deleteUser } = require("./controllers/users.controllers");
 const { getBookById, getBooks, postBook, deleteBookById } = require("./controllers/books.controllers");
@@ -23,6 +23,8 @@ app.get("/api/books/:id", getBookById);
 app.post('/api/books', postBook)
 
 app.get("/api/genres", getGenres);
+
+app.post("/api/genres", postGenres)
 
 app.delete("/api/books/:book_id", deleteBookById);
 

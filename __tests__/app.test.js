@@ -709,29 +709,92 @@ describe("GET /books by genre", () => {
   });
 });
 
+describe("/api/genres", () => {
+  test("POST 201: responds with new genre", () => {
+    const newGenre = {
+      genre: "Horror"
+    }
+
+    return request(app)
+      .post("/api/genres")
+      .send(newGenre)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.genre.genre).toBe('Horror')
+      })
+  })
+  test("POST:400: respods with an error message if genre is missing", () => {
+    const newGenre = {}
+
+    return request(app)
+      .post('/api/genres')
+      .send(newGenre)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Path `genre` is required.")
+      })
+  })
+  test('POST:400 responds with an error message if genre posted already exists', () => {
+    const newGenre = {
+      genre: "Mystery"
+    }
+    return request(app)
+      .post('/api/genres')
+      .send(newGenre)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('genre already exists')
+      })
+  })
+  test('POST:201 ignores unnecessary fields', () => {
+    const newGenre = {
+      genre: 'Horror',
+      banana: 'banana'
+    }
+    return request(app)
+      .post('/api/genres')
+      .send(newGenre)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.genre.genre).toBe('Horror')
+      })
+  })
+  test('POST:400 responds with an error if the request genre is not a string', () => {
+    const newGenre = {
+      genre: 12
+    }
+    return request(app)
+      .post('/api/genres')
+      .send(newGenre)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('bad request')
+      })
+  })
+})
 
 describe("DELETE: /api/books/:book_id", () => {
   test('DELETE: 204 deletes the book', () => {
-      return request(app)
+    return request(app)
       .delete("/api/books/6593f8b7fdb38e563114965f")
       .expect(204);
   });
   test('DELETE: 400 sends an error if the book ID is invalid', () => {
-      return request(app)
+    return request(app)
       .delete("/api/books/dog")
       .expect(400)
       .then(({ body }) => {
-          expect(body.msg).toBe("bad request")
+        expect(body.msg).toBe("bad request")
       })
   })
   test('DELETE: 404 sends an error if the book isnt found', () => {
     return request(app)
-    .delete("/api/books/1234007551053b8f385127a8")
-    .expect(404)
-    .then(({ body }) => {
+      .delete("/api/books/1234007551053b8f385127a8")
+      .expect(404)
+      .then(({ body }) => {
         expect(body.msg).toBe("book not found")
-    })
-})
+      })
+  })
 })
 
 describe("POST /api/books", () => {
