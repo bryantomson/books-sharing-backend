@@ -16,25 +16,28 @@ exports.getUsers = (req, res, next) => {
       res.status(200).send({ users });
     })
     .catch(next);
-}
+};
 
 exports.postUser = (req, res, next) => {
-  const newUser = req.body
-  const newUsername = new RegExp(`^${newUser.username}$`, 'i')
-  selectUsers().then((users) => {
-    const usernames = users.map((user) => {
-      return user.username
+  const newUser = req.body;
+  const newUsername = new RegExp(`^${newUser.username}$`, "i");
+  selectUsers()
+    .then((users) => {
+      const usernames = users.map((user) => {
+        return user.username;
+      });
+      const usernameExists = usernames.some((username) =>
+        newUsername.test(username)
+      );
+      if (usernameExists) {
+        return Promise.reject({ status: 400, msg: "username already in use" });
+      }
     })
-    const usernameExists = usernames.some(username => newUsername.test(username))
-    if (usernameExists) {
-      return Promise.reject({ status: 400, msg: 'username already in use' })
-    }
-  })
     .then(() => {
-      return addUser(newUser)
+      return addUser(newUser);
     })
     .then((user) => {
-      res.status(201).send({ user })
+      res.status(201).send({ user });
     })
     .catch(next)
 }

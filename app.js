@@ -8,6 +8,7 @@ const app = express();
 app.use(express.json());
 
 app.get("/api/users", getUsers);
+app.post("/api/users", postUser);
 
 app.get("/api/users/:user_id", getUserById);
 app.patch("/api/users/:user_id", patchUser);
@@ -24,8 +25,7 @@ app.get("/api/genres", getGenres);
 
 app.use(handleMongoErrors)
 app.use(handleCustomErrors);
+app.use(handleMongoErrors);
 app.use(handleServerErrors);
-
-
 
 module.exports = app;
