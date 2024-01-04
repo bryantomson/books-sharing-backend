@@ -62,6 +62,7 @@ exports.findBooks = (queries) => {
       return res;
     }
   })
+}
 
 exports.deleteBookListing = (id) => {
   if (id.length !== 24) {
