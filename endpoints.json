@@ -47,13 +47,13 @@
         }
       ]
     },
-    "POST /api/books":{
+    "POST /api/books": {
       "description": "posts a new Book to an array of books",
       "queries": [],
       "exampleResponse": {
         "book": [
           {
-           "title": "Harry Potter and the Chamber of Secrets",
+            "title": "Harry Potter and the Chamber of Secrets",
             "author": "J. K. Rowling",
             "username": "Beatrizzzz",
             "published_date": "1998-05-30",

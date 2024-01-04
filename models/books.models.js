@@ -62,15 +62,14 @@ exports.findBooks = (queries) => {
     .catch((next) => {});
 };
 
-exports.addBook=(newBook)=>{
-
+exports.addBook = (newBook) => {
   if (!newBook.book_img) {
-    newBook.book_img ='https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Book_missing.svg/595px-Book_missing.svg.png'
+    newBook.book_img =
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Book_missing.svg/595px-Book_missing.svg.png";
   }
 
-const book = new Book(newBook);
+  const book = new Book(newBook);
   return book.save().then((postedBook) => {
     return postedBook;
-  })
-
-}
+  });
+};
