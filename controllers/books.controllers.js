@@ -29,7 +29,6 @@ exports.getBooks = (req, res, next) => {
         res.status(204).end();
     })
     .catch((err) => {
-        console.log(err)
         next(err)
     })
 }

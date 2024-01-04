@@ -63,14 +63,12 @@ exports.findBooks = (queries) => {
 };
 
 exports.deleteBookListing = (id) => {
-  console.log("INSIDE MODEL");
   if (id.length !== 24) {
     return Promise.reject({ status: 400, msg: "Bad Request" });
   }
 
   return Book.findByIdAndDelete(id).then((result) => {
     if (result) {
-      console.log("RESULT");
       return result;
     } else {
       return Promise.reject({ status: 404, msg: "Book Not Found" });
