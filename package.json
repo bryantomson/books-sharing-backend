@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon app.js",
+    "dev": "nodemon listen.js",
     "test": "jest --detectOpenHandles",
     "seed": "node ./db/run-seed.js"
   },
