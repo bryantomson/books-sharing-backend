@@ -16,6 +16,21 @@
       }
     }
   },
+  "DELETE /api/users/:user_id": {
+    "description": "deletes a single user object with the requested user ID",
+    "queries": [
+      "username",
+      "location",
+      "password", 
+      "avatar_img",
+      "bio",
+      "rating",
+      "number_borrowed",
+      "number_lent,"],
+    "exampleResponse": {
+      "user": {}
+    }
+  },
   "GET /api/books": {
     "description": "serves an array of all books",
     "queries": [

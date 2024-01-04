@@ -20,6 +20,21 @@ exports.selectUsers = () => {
   });
 };
 
+exports.deleteUserById = (id) => {
+  
+  if (id.length !== 24) {
+    return Promise.reject({ status: 400, msg: "bad request" });
+  }
+
+  return User.findByIdAndDelete(id).then((user) => {
+    if (user) {
+      return user;
+    } else {
+      return Promise.reject({ status: 404, msg: "user not found" });
+    }
+  });
+};
+
 
 exports.updateUser = (user, request) => {
   const validUpdates = [
@@ -63,3 +78,4 @@ exports.updateUser = (user, request) => {
     return patchedUser;
   });
 };
+

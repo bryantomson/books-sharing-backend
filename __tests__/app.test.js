@@ -379,6 +379,33 @@ describe("/api/users/:user_id", () => {
   });
 });
 
+describe("DELETE /api/users/:user_id", () => {
+  test("DELETE:204 responds with a single user object of the deleted user", () => {
+    return request(app)
+      .delete("/api/users/6594007551053b8f385697a7")
+      .expect(204)
+      .then(({ body }) => {
+        expect(body).toEqual({})
+      });
+  });
+  test("DELETE:404 responds with an error if the id is valid but user doesn't exist", () => {
+    return request(app)
+      .delete("/api/users/6554007571753b8f385697b7")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("user not found");
+      });
+  });
+  test("DELETE:400 responds with an error if the id is invalid", () => {
+    return request(app)
+      .delete("/api/users/banana")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+});
+
 describe("GET /api/books/:id", () => {
   test("200: responds with a single book by given id", () => {
     const expectedBook = {
