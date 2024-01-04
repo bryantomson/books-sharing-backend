@@ -20,6 +20,7 @@ exports.selectUsers = () => {
   });
 };
 
+
 exports.updateUser = (user, request) => {
   const validUpdates = [
     "newLocation",

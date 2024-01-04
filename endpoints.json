@@ -104,6 +104,15 @@
         "genre": "Coming-of-location",
         "__v": "0"
       }
+    } 
+  },
+  "DELETE /api/books/:book_id": {
+    "description": "deletes a book",
+    "queries": [],
+    "exampleResponse": {
+      "books": [
+        {}
+      ]
     }
   },
   "POST /api/books": {
