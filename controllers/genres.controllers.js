@@ -1,4 +1,4 @@
-const { selectGenre } = require("../models/app.models");
+const { selectGenre } = require("../models/genres.models");
 
 exports.getGenres = (req, res) => {
     selectGenre()

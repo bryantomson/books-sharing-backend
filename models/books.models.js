@@ -64,14 +64,14 @@ exports.findBooks = (queries) => {
 
 exports.deleteBookListing = (id) => {
   if (id.length !== 24) {
-    return Promise.reject({ status: 400, msg: "Bad Request" });
+    return Promise.reject({ status: 400, msg: "bad request" });
   }
 
   return Book.findByIdAndDelete(id).then((result) => {
     if (result) {
       return result;
     } else {
-      return Promise.reject({ status: 404, msg: "Book Not Found" });
+      return Promise.reject({ status: 404, msg: "book not found" });
     }
   });
 };

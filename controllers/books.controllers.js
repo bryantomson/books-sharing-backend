@@ -22,7 +22,7 @@ exports.getBooks = (req, res, next) => {
       .catch(next);
   };
 
-  exports.deleteBookListing = (req, res, next) => {
+  exports.deleteBookById = (req, res, next) => {
     const { book_id } = req.params;
     deleteBookListing( book_id )
     .then(() => {

@@ -79,16 +79,7 @@
   },
   "DELETE /api/books/:book_id": {
     "description": "deletes a book",
-    "queries": [
-      "username",
-      "author",
-      "title",
-      "genre",
-      "published_date",
-      "condition",
-      "borrow_length",
-      "isbn"
-    ],
+    "queries": [],
     "exampleResponse": {
       "books": [
         {}

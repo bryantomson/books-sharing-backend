@@ -231,7 +231,7 @@ describe("DELETE: /api/books/:book_id", () => {
       .delete("/api/books/dog")
       .expect(400)
       .then(({ body }) => {
-          expect(body.msg).toBe("Bad Request")
+          expect(body.msg).toBe("bad request")
       })
   })
   test('DELETE: 404 sends an error if the book isnt found', () => {
@@ -239,7 +239,7 @@ describe("DELETE: /api/books/:book_id", () => {
     .delete("/api/books/1234007551053b8f385127a8")
     .expect(404)
     .then(({ body }) => {
-        expect(body.msg).toBe("Book Not Found")
+        expect(body.msg).toBe("book not found")
     })
 })
 })
