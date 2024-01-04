@@ -3,6 +3,7 @@ const express = require("express");
 const { getUsers, getUserById } = require("./controllers/users.controllers");
 const { getBookById, getBooks } = require("./controllers/books.controllers");
 const { handleCustomErrors, handleServerErrors } = require("./errors/errors");
+const db = require("./db/connection"); //do not remove this line
 const app = express();
 
 app.use(express.json());

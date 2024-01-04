@@ -1,5 +1,7 @@
 const Book = require("../db/schema/book-schema");
 
+
+
 exports.selectSingleBook = (id) => {
   if (id.length !== 24) {
     return Promise.reject({ status: 400, msg: "bad request" });
@@ -17,6 +19,7 @@ exports.selectSingleBook = (id) => {
 };
 
 exports.findBooks = (queries) => {
+
   const {
     username,
     author,
@@ -47,12 +50,15 @@ exports.findBooks = (queries) => {
 
   for (const key in queries) {
     if (!filters.hasOwnProperty(key)) {
+      console.log("HLIUBWRLIYB")
       return Promise.reject({ status: 400, msg: "bad request" });
     }
   }
 
+
   return Book.find(filters)
     .then((res) => {
+      console.log(res, "res")
       if (!res.length) {
         return Promise.reject({ status: 404, msg: "not found" });
       } else {
