@@ -491,6 +491,33 @@ describe("/api/users/:user_id", () => {
   });
 });
 
+describe("DELETE /api/users/:user_id", () => {
+  test("DELETE:204 responds with a single user object of the deleted user", () => {
+    return request(app)
+      .delete("/api/users/6594007551053b8f385697a7")
+      .expect(204)
+      .then(({ body }) => {
+        expect(body).toEqual({})
+      });
+  });
+  test("DELETE:404 responds with an error if the id is valid but user doesn't exist", () => {
+    return request(app)
+      .delete("/api/users/6554007571753b8f385697b7")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("user not found");
+      });
+  });
+  test("DELETE:400 responds with an error if the id is invalid", () => {
+    return request(app)
+      .delete("/api/users/banana")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+});
+
 describe("GET /api/books/:id", () => {
   test("200: responds with a single book by given id", () => {
     const expectedBook = {
@@ -634,6 +661,31 @@ describe("GET /books by genre", () => {
   });
 });
 
+
+describe("DELETE: /api/books/:book_id", () => {
+  test('DELETE: 204 deletes the book', () => {
+      return request(app)
+      .delete("/api/books/6593f8b7fdb38e563114965f")
+      .expect(204);
+  });
+  test('DELETE: 400 sends an error if the book ID is invalid', () => {
+      return request(app)
+      .delete("/api/books/dog")
+      .expect(400)
+      .then(({ body }) => {
+          expect(body.msg).toBe("bad request")
+      })
+  })
+  test('DELETE: 404 sends an error if the book isnt found', () => {
+    return request(app)
+    .delete("/api/books/1234007551053b8f385127a8")
+    .expect(404)
+    .then(({ body }) => {
+        expect(body.msg).toBe("book not found")
+    })
+})
+})
+
 describe("POST /api/books", () => {
   test("201: responds with the added book", () => {
     const newBook = {
@@ -706,3 +758,4 @@ describe("POST /api/books", () => {
       });
   });
 });
+

@@ -1,8 +1,9 @@
 const { getGenres } = require("./controllers/genres.controllers");
 const express = require("express");
-const { getUsers, getUserById, patchUser, postUser } = require("./controllers/users.controllers");
-const { getBookById, getBooks, postBook } = require("./controllers/books.controllers");
+const { getUsers, getUserById, patchUser, postUser, deleteUser } = require("./controllers/users.controllers");
+const { getBookById, getBooks, postBook, deleteBookById } = require("./controllers/books.controllers");
 const { handleCustomErrors, handleServerErrors, handleMongoErrors } = require("./errors/errors");
+
 const app = express();
 
 app.use(express.json());
@@ -23,9 +24,15 @@ app.post('/api/books', postBook)
 
 app.get("/api/genres", getGenres);
 
+app.delete("/api/books/:book_id", deleteBookById);
+
+app.delete("/api/users/:user_id", deleteUser);
+
+
 app.use(handleMongoErrors)
 app.use(handleCustomErrors);
 app.use(handleMongoErrors);
 app.use(handleServerErrors);
+
 
 module.exports = app;

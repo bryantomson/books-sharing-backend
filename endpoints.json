@@ -16,6 +16,21 @@
       }
     }
   },
+  "DELETE /api/users/:user_id": {
+    "description": "deletes a single user object with the requested user ID",
+    "queries": [
+      "username",
+      "location",
+      "password", 
+      "avatar_img",
+      "bio",
+      "rating",
+      "number_borrowed",
+      "number_lent,"],
+    "exampleResponse": {
+      "user": {}
+    }
+  },
   "GET /api/books": {
     "description": "serves an array of all books",
     "queries": [
@@ -128,6 +143,15 @@
         "genre": "Coming-of-location",
         "__v": "0"
       }
+    } 
+  },
+  "DELETE /api/books/:book_id": {
+    "description": "deletes a book",
+    "queries": [],
+    "exampleResponse": {
+      "books": [
+        {}
+      ]
     }
   },
   "POST /api/books": {
