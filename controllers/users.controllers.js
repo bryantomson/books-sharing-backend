@@ -1,4 +1,9 @@
-const { selectUserById, selectUsers, deleteUserById } = require("../models/users.models");
+const {
+  selectUserById,
+  selectUsers,
+  updateUser,
+  deleteUserById
+} = require("../models/users.models");
 
 exports.getUserById = (req, res, next) => {
   const { user_id } = req.params;
@@ -24,6 +29,17 @@ exports.deleteUser = (req, res, next) => {
       res.status(204).send(deletedUser);
     })
     .catch(next);
-}
+};
 
+exports.patchUser = (req, res, next) => {
+  const { user_id } = req.params;
+  selectUserById(user_id)
+    .then((user) => {
+      return updateUser(user, req.body);
+    })
+    .then((user) => {
+      res.status(200).send({ user });
+    })
+    .catch(next);
+};
 

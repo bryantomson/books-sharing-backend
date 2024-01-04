@@ -61,3 +61,29 @@ exports.findBooks = (queries) => {
     })
     .catch((next) => {});
 };
+
+
+exports.deleteBookListing = (id) => {
+  if (id.length !== 24) {
+    return Promise.reject({ status: 400, msg: "bad request" });
+  }
+
+  return Book.findByIdAndDelete(id).then((result) => {
+    if (result) {
+      return result;
+    } else {
+      return Promise.reject({ status: 404, msg: "book not found" });
+    }
+  })
+}
+exports.addBook = (newBook) => {
+  if (!newBook.book_img) {
+    newBook.book_img =
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Book_missing.svg/595px-Book_missing.svg.png";
+  }
+
+  const book = new Book(newBook);
+  return book.save().then((postedBook) => {
+    return postedBook;
+  });
+};
