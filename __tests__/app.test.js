@@ -202,7 +202,7 @@ describe("/api/users/:user_id", () => {
       rating: 0,
       number_borrowed: 1,
       number_lent: 2,
-    }
+    };
     return request(app)
       .patch("/api/users/6594007551053b8f385697a3")
       .send(update)
@@ -210,7 +210,7 @@ describe("/api/users/:user_id", () => {
       .then(({ body }) => {
         expect(body.user).toMatchObject(expectedResponse);
       });
-  })
+  });
   test("PATCH:200 updates password, returns with updated user object", () => {
     const update = {
       newPassword: "fjksaoijhio768",
@@ -497,7 +497,7 @@ describe("DELETE /api/users/:user_id", () => {
       .delete("/api/users/6594007551053b8f385697a7")
       .expect(204)
       .then(({ body }) => {
-        expect(body).toEqual({})
+        expect(body).toEqual({});
       });
   });
   test("DELETE:404 responds with an error if the id is valid but user doesn't exist", () => {
@@ -664,90 +664,90 @@ describe("GET /books by genre", () => {
 describe("/api/genres", () => {
   test("POST 201: responds with new genre", () => {
     const newGenre = {
-      genre: "Horror"
-    }
+      genre: "Horror",
+    };
 
     return request(app)
       .post("/api/genres")
       .send(newGenre)
       .expect(201)
       .then(({ body }) => {
-        expect(body.genre.genre).toBe('Horror')
-      })
-  })
+        expect(body.genre.genre).toBe("Horror");
+      });
+  });
   test("POST:400: respods with an error message if genre is missing", () => {
-    const newGenre = {}
+    const newGenre = {};
 
     return request(app)
-      .post('/api/genres')
+      .post("/api/genres")
       .send(newGenre)
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("Path `genre` is required.")
-      })
-  })
-  test('POST:400 responds with an error message if genre posted already exists', () => {
+        expect(body.msg).toBe("Path `genre` is required.");
+      });
+  });
+  test("POST:400 responds with an error message if genre posted already exists", () => {
     const newGenre = {
-      genre: "Mystery"
-    }
+      genre: "Mystery",
+    };
     return request(app)
-      .post('/api/genres')
+      .post("/api/genres")
       .send(newGenre)
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe('genre already exists')
-      })
-  })
-  test('POST:201 ignores unnecessary fields', () => {
+        expect(body.msg).toBe("genre already exists");
+      });
+  });
+  test("POST:201 ignores unnecessary fields", () => {
     const newGenre = {
-      genre: 'Horror',
-      banana: 'banana'
-    }
+      genre: "Horror",
+      banana: "banana",
+    };
     return request(app)
-      .post('/api/genres')
+      .post("/api/genres")
       .send(newGenre)
       .expect(201)
       .then(({ body }) => {
-        expect(body.genre.genre).toBe('Horror')
-      })
-  })
-  test('POST:400 responds with an error if the request genre is not a string', () => {
+        expect(body.genre.genre).toBe("Horror");
+      });
+  });
+  test("POST:400 responds with an error if the request genre is not a string", () => {
     const newGenre = {
-      genre: 12
-    }
+      genre: 12,
+    };
     return request(app)
-      .post('/api/genres')
+      .post("/api/genres")
       .send(newGenre)
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe('bad request')
-      })
-  })
-})
+        expect(body.msg).toBe("bad request");
+      });
+  });
+});
 
 describe("DELETE: /api/books/:book_id", () => {
-  test('DELETE: 204 deletes the book', () => {
+  test("DELETE: 204 deletes the book", () => {
     return request(app)
       .delete("/api/books/6593f8b7fdb38e563114965f")
       .expect(204);
   });
-  test('DELETE: 400 sends an error if the book ID is invalid', () => {
+  test("DELETE: 400 sends an error if the book ID is invalid", () => {
     return request(app)
       .delete("/api/books/dog")
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("bad request")
-      })
-  })
-  test('DELETE: 404 sends an error if the book isnt found', () => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+  test("DELETE: 404 sends an error if the book isnt found", () => {
     return request(app)
       .delete("/api/books/1234007551053b8f385127a8")
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("book not found")
-      })
-  })
-})
+        expect(body.msg).toBe("book not found");
+      });
+  });
+});
 
 describe("POST /api/books", () => {
   test("201: responds with the added book", () => {
@@ -822,3 +822,41 @@ describe("POST /api/books", () => {
   });
 });
 
+describe("/api/messages?users= ...", () => {
+  test("GET:200 responds with an array of all messages between 2 users", () => {
+    return request(app)
+      .get("/api/messages?users=Sarah+Blue-David+Black")
+      .expect(200)
+      .then(({ body }) => {
+        const { messages } = body;
+        expect(messages).toHaveLength(4);
+        messages.forEach((message) => {
+          expect(message).toMatchObject({
+            _id: expect.any(String),
+            between: expect.any(Array),
+            from: expect.any(String),
+            timestamp: expect.any(String),
+            body: expect.any(String),
+          });
+        });
+      });
+  });
+  test("GET:200 responds with an array of all messages between 2 other users", () => {
+    return request(app)
+      .get("/api/messages?users=David+Black-Emily+White")
+      .expect(200)
+      .then(({ body }) => {
+        const { messages } = body;
+        expect(messages).toHaveLength(1);
+        messages.forEach((message) => {
+          expect(message).toMatchObject({
+            _id: expect.any(String),
+            between: expect.any(Array),
+            from: expect.any(String),
+            timestamp: expect.any(String),
+            body: expect.any(String),
+          });
+        });
+      });
+  });
+});
