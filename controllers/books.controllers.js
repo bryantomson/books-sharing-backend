@@ -28,7 +28,6 @@ exports.getBooks = (req, res, next) => {
         res.status(200).send({ books: books });
       })
       .catch((err)=>{
-console.log(err);
 next(err)
       });
   };
