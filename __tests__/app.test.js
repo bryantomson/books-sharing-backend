@@ -2,6 +2,7 @@ const request = require("supertest");
 const app = require("../app.js");
 const db = require("../db/connection.js");
 const seed = require("../db/seed.js");
+const { ObjectId } = require("mongodb");
 
 beforeEach(() => {
   return seed();
@@ -32,6 +33,118 @@ describe("/api/users", () => {
             number_lent: expect.any(Number),
           });
         });
+      });
+  });
+  test("POST:201 responds with a new user object", () => {
+    const newUser = {
+      _id: new ObjectId("6594007551053b8f385697ab"),
+      username: "Bob Ross",
+      location: "Liverpool",
+      password: "Art",
+      avatar_img:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
+      bio: "hello my name is username",
+    };
+    return request(app)
+      .post("/api/users")
+      .send(newUser)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.user._id).toBe("6594007551053b8f385697ab");
+        expect(body.user.username).toBe("Bob Ross");
+        expect(body.user.location).toBe("Liverpool");
+        expect(body.user.password).toBe("Art");
+        expect(body.user.avatar_img).toBe(
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU"
+        );
+        expect(body.user.bio).toBe("hello my name is username");
+        expect(body.user.rating).toBe(0);
+        expect(body.user.number_borrowed).toBe(0);
+        expect(body.user.number_lent).toBe(0);
+      });
+  });
+  test("POST:201 responds with a new user object if the request body does not contain the non required keys", () => {
+    const newUser = {
+      username: "Bob Ross",
+      location: "Liverpool",
+      password: "Art",
+    };
+    return request(app)
+      .post("/api/users")
+      .send(newUser)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.user.avatar_img).toBe(
+          "https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-avatar-vector-isolated-on-white-background-png-image_1694546.jpg"
+        );
+        expect(body.user.bio).toBe("");
+      });
+  });
+  test("POST:400 responds with an error message if username is missing", () => {
+    const newUser = {
+      location: "Liverpool",
+      password: "Art",
+    };
+    return request(app)
+      .post("/api/users")
+      .send(newUser)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Path `username` is required.");
+      });
+  });
+  test("POST:400 responds with an error message if password is missing", () => {
+    const newUser = {
+      username: "Bob Ross",
+      location: "Liverpool",
+    };
+    return request(app)
+      .post("/api/users")
+      .send(newUser)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Path `password` is required.");
+      });
+  });
+  test("POST:400 responds with an error message if more than one required fields are missing", () => {
+    const newUser = {
+      username: "Bob Ross",
+    };
+    return request(app)
+      .post("/api/users")
+      .send(newUser)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Path `password` is required.");
+      });
+  });
+  test("POST:201 ignores unnecessary fields", () => {
+    const newUser = {
+      username: "Bob Ross",
+      location: "Liverpool",
+      password: "Art",
+      banana: "banana",
+    };
+    return request(app)
+      .post("/api/users")
+      .send(newUser)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.user.banana).toBe(undefined);
+      });
+  });
+  test("POST:400 responds with an error if username already exists (case insensitive)", () => {
+    const newUser = {
+      username: "jane smith",
+      location: "Liverpool",
+      password: "Art",
+    };
+    return request(app)
+      .post("/api/users")
+      .send(newUser)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("username already in use");
       });
   });
 });
@@ -74,9 +187,338 @@ describe("/api/users/:user_id", () => {
         expect(body.msg).toBe("bad request");
       });
   });
+  test("PATCH:200 updates location, returns with updated user object", () => {
+    const update = {
+      newLocation: "Liverpool",
+    };
+    const expectedResponse = {
+      _id: "6594007551053b8f385697a3",
+      username: "John Doe",
+      location: "Liverpool",
+      password: "Science Fiction",
+      avatar_img:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
+      bio: "hello my name is username",
+      rating: 0,
+      number_borrowed: 1,
+      number_lent: 2,
+    }
+    return request(app)
+      .patch("/api/users/6594007551053b8f385697a3")
+      .send(update)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.user).toMatchObject(expectedResponse);
+      });
+  })
+  test("PATCH:200 updates password, returns with updated user object", () => {
+    const update = {
+      newPassword: "fjksaoijhio768",
+    };
+    const expectedResponse = {
+      _id: "6594007551053b8f385697a3",
+      username: "John Doe",
+      location: "Manchester",
+      password: "fjksaoijhio768",
+      avatar_img:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
+      bio: "hello my name is username",
+      rating: 0,
+      number_borrowed: 1,
+      number_lent: 2,
+    };
+
+    return request(app)
+      .patch("/api/users/6594007551053b8f385697a3")
+      .send(update)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.user).toMatchObject(expectedResponse);
+      });
+  });
+  test("PATCH:200 updates avatar_img, returns with updated user object", () => {
+    const update = {
+      newAvatar:
+        "https://cdn.iconscout.com/icon/free/png-512/free-avatar-370-456322.png?f=webp&w=512",
+    };
+    const expectedResponse = {
+      _id: "6594007551053b8f385697a3",
+      username: "John Doe",
+      location: "Manchester",
+      password: "Science Fiction",
+      avatar_img:
+        "https://cdn.iconscout.com/icon/free/png-512/free-avatar-370-456322.png?f=webp&w=512",
+      bio: "hello my name is username",
+      rating: 0,
+      number_borrowed: 1,
+      number_lent: 2,
+    };
+
+    return request(app)
+      .patch("/api/users/6594007551053b8f385697a3")
+      .send(update)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.user).toMatchObject(expectedResponse);
+      });
+  });
+  test("PATCH:200 updates bio, returns with updated user object", () => {
+    const update = {
+      newBio: "This my new, updated bio. So cool!",
+    };
+    const expectedResponse = {
+      _id: "6594007551053b8f385697a3",
+      username: "John Doe",
+      location: "Manchester",
+      password: "Science Fiction",
+      avatar_img:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
+      bio: "This my new, updated bio. So cool!",
+      rating: 0,
+      number_borrowed: 1,
+      number_lent: 2,
+    };
+
+    return request(app)
+      .patch("/api/users/6594007551053b8f385697a3")
+      .send(update)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.user).toMatchObject(expectedResponse);
+      });
+  });
+  test("PATCH:200 increases rating by 1, returns with updated user object", () => {
+    const update = {
+      incrementRating: 1,
+    };
+    const expectedResponse = {
+      _id: "6594007551053b8f385697a3",
+      username: "John Doe",
+      location: "Manchester",
+      password: "Science Fiction",
+      avatar_img:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
+      bio: "hello my name is username",
+      rating: 1,
+      number_borrowed: 1,
+      number_lent: 2,
+    };
+
+    return request(app)
+      .patch("/api/users/6594007551053b8f385697a3")
+      .send(update)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.user).toMatchObject(expectedResponse);
+      });
+  });
+  test("PATCH:200 changes rating by any number, returns with updated user object", () => {
+    const update = {
+      incrementRating: -1,
+    };
+    const expectedResponse = {
+      _id: "6594007551053b8f385697a3",
+      username: "John Doe",
+      location: "Manchester",
+      password: "Science Fiction",
+      avatar_img:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
+      bio: "hello my name is username",
+      rating: -1,
+      number_borrowed: 1,
+      number_lent: 2,
+    };
+
+    return request(app)
+      .patch("/api/users/6594007551053b8f385697a3")
+      .send(update)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.user).toMatchObject(expectedResponse);
+      });
+  });
+  test("PATCH:200 increases number_borrowed by 1, returns with updated user object", () => {
+    const update = {
+      incrementBorrowed: 1,
+    };
+    const expectedResponse = {
+      _id: "6594007551053b8f385697a3",
+      username: "John Doe",
+      location: "Manchester",
+      password: "Science Fiction",
+      avatar_img:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
+      bio: "hello my name is username",
+      rating: 0,
+      number_borrowed: 2,
+      number_lent: 2,
+    };
+
+    return request(app)
+      .patch("/api/users/6594007551053b8f385697a3")
+      .send(update)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.user).toMatchObject(expectedResponse);
+      });
+  });
+  test("PATCH:200 increases lent by 1, returns with updated user object", () => {
+    const update = {
+      incrementLent: 1,
+    };
+    const expectedResponse = {
+      _id: "6594007551053b8f385697a3",
+      username: "John Doe",
+      location: "Manchester",
+      password: "Science Fiction",
+      avatar_img:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
+      bio: "hello my name is username",
+      rating: 0,
+      number_borrowed: 1,
+      number_lent: 3,
+    };
+
+    return request(app)
+      .patch("/api/users/6594007551053b8f385697a3")
+      .send(update)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.user).toMatchObject(expectedResponse);
+      });
+  });
+  test("PATCH:200 updates multiple properties for an existing user", () => {
+    const update = {
+      newLocation: "Liverpool",
+      newPassword: "hjkjklokdfosjofds6783628173892",
+    };
+    const expectedResponse = {
+      _id: "6594007551053b8f385697a3",
+      username: "John Doe",
+      location: "Liverpool",
+      password: "hjkjklokdfosjofds6783628173892",
+      avatar_img:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
+      bio: "hello my name is username",
+      rating: 0,
+      number_borrowed: 1,
+      number_lent: 2,
+    };
+
+    return request(app)
+      .patch("/api/users/6594007551053b8f385697a3")
+      .send(update)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.user).toMatchObject(expectedResponse);
+      });
+  });
+  test("PATCH:404 responds with an error if the id is valid but user doesn't exist", () => {
+    const update = {
+      incrementLent: 1,
+    };
+
+    return request(app)
+      .patch("/api/users/6554007571753b8f385697b7")
+      .send(update)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("user not found");
+      });
+  });
+  test("PATCH:400 responds with an error if the id is invalid", () => {
+    const update = {
+      incrementLent: 1,
+    };
+
+    return request(app)
+      .patch("/api/users/banana")
+      .send(update)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+  test("PATCH:400 responds with an error if the data types in request body are invalid", () => {
+    const update = {
+      newLocation: 1,
+    };
+
+    return request(app)
+      .patch("/api/users/6594007551053b8f385697a3")
+      .send(update)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+  test("PATCH:400 responds with an error if the data type (for password) in request body are invalid", () => {
+    const update = {
+      newPassword: 9000,
+    };
+
+    return request(app)
+      .patch("/api/users/6594007551053b8f385697a3")
+      .send(update)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+  test("PATCH:400 responds with an error if there are invalid key(s) in request body", () => {
+    const update = {
+      newBanana: "Gold banana",
+    };
+
+    return request(app)
+      .patch("/api/users/6594007551053b8f385697a3")
+      .send(update)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+  test("PATCH:400 responds with an error if the request body is empty", () => {
+    const update = {};
+
+    return request(app)
+      .patch("/api/users/6594007551053b8f385697a3")
+      .send(update)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
 });
 
-describe("GET /books/:id", () => {
+describe("DELETE /api/users/:user_id", () => {
+  test("DELETE:204 responds with a single user object of the deleted user", () => {
+    return request(app)
+      .delete("/api/users/6594007551053b8f385697a7")
+      .expect(204)
+      .then(({ body }) => {
+        expect(body).toEqual({})
+      });
+  });
+  test("DELETE:404 responds with an error if the id is valid but user doesn't exist", () => {
+    return request(app)
+      .delete("/api/users/6554007571753b8f385697b7")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("user not found");
+      });
+  });
+  test("DELETE:400 responds with an error if the id is invalid", () => {
+    return request(app)
+      .delete("/api/users/banana")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+});
+
+describe("GET /api/books/:id", () => {
   test("200: responds with a single book by given id", () => {
     const expectedBook = {
       _id: "6593f8b7fdb38e563114965f",
@@ -93,9 +535,8 @@ describe("GET /books/:id", () => {
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU",
       __v: 0,
     };
-
     return request(app)
-      .get("/books/6593f8b7fdb38e563114965f")
+      .get("/api/books/6593f8b7fdb38e563114965f")
       .expect(200)
       .then(({ body }) => {
         const { book } = body;
@@ -104,7 +545,7 @@ describe("GET /books/:id", () => {
   });
   test("404: responds with error if book id does not exist", () => {
     return request(app)
-      .get("/books/6593f8b7fdb38e563114965h")
+      .get("/api/books/6593f8b7fdb38e563114965h")
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("book not found");
@@ -112,7 +553,7 @@ describe("GET /books/:id", () => {
   });
   test("400: responds with error if book id does not exist", () => {
     return request(app)
-      .get("/books/doesnotexist")
+      .get("/api/books/doesnotexist")
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("bad request");
@@ -283,3 +724,101 @@ describe("/api/genres", () => {
       })
   })
 })
+
+describe("DELETE: /api/books/:book_id", () => {
+  test('DELETE: 204 deletes the book', () => {
+    return request(app)
+      .delete("/api/books/6593f8b7fdb38e563114965f")
+      .expect(204);
+  });
+  test('DELETE: 400 sends an error if the book ID is invalid', () => {
+    return request(app)
+      .delete("/api/books/dog")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request")
+      })
+  })
+  test('DELETE: 404 sends an error if the book isnt found', () => {
+    return request(app)
+      .delete("/api/books/1234007551053b8f385127a8")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("book not found")
+      })
+  })
+})
+
+describe("POST /api/books", () => {
+  test("201: responds with the added book", () => {
+    const newBook = {
+      title: "Harry Potter and the Goblet of Fire",
+      username: "Beatrizzzz",
+      author: "J. K. Rowling",
+      published_date: "2000-05-30",
+      genre: "Magical Realism",
+      isbn: "978-0-06-112009-1",
+      description: "A fun exciting book",
+      condition: "New",
+      borrow_length: "4 weeks",
+      book_img:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU",
+    };
+    return request(app)
+      .post("/api/books")
+      .send(newBook)
+      .expect(201)
+      .then(({ body }) => {
+        const { book } = body;
+        expect(book).toMatchObject(newBook);
+        expect(typeof book._id).toBe("string");
+      });
+  });
+  test("POST error 400 there are missing properties of the posted book ", () => {
+    const newBook = {
+      username: "Beatrizzzz",
+      author: "J. K. Rowling",
+      published_date: "1999-05-30",
+      genre: "Magical Realism",
+      isbn: "978-0-06-112009-1",
+      description: "A scary spooky book",
+      condition: "New",
+      borrow_length: "3 weeks",
+      book_img:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU",
+    };
+    return request(app)
+      .post("/api/books")
+      .send(newBook)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Path `title` is required.");
+      });
+  });
+  test("POST 201 should add default book img for book when not provided in newBook object ", () => {
+    const newBook = {
+      title: "Harry Potter and the Chamber of Secrets",
+      username: "Beatrizzzz",
+      author: "J. K. Rowling",
+      published_date: "1998-05-30",
+      genre: "Magical Realism",
+      isbn: "978-0-06-142019-1",
+      description: "A short sweet book",
+      condition: "New",
+      borrow_length: "5 weeks",
+    };
+    return request(app)
+      .post("/api/books")
+      .send(newBook)
+      .expect(201)
+      .then(({ body }) => {
+        const { book } = body;
+        expect(book).toMatchObject(newBook);
+        expect(typeof book._id).toBe("string");
+        expect(book.book_img).toBe(
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Book_missing.svg/595px-Book_missing.svg.png"
+        );
+      });
+  });
+});
+

@@ -1,4 +1,9 @@
-const { selectSingleBook, findBooks } = require("../models/books.models");
+const {
+  selectSingleBook,
+  findBooks,
+  addBook,
+  deleteBookListing
+} = require("../models/books.models");
 
 exports.getBookById = (req, res, next) => {
   const paramId = req.params.id;
@@ -13,6 +18,7 @@ exports.getBookById = (req, res, next) => {
 };
 
 exports.getBooks = (req, res, next) => {
+
     const queries = req.query;
   
     findBooks(queries)
@@ -21,3 +27,23 @@ exports.getBooks = (req, res, next) => {
       })
       .catch(next);
   };
+
+  exports.deleteBookById = (req, res, next) => {
+    const { book_id } = req.params;
+    deleteBookListing( book_id )
+    .then(() => {
+        res.status(204).end();
+    })
+    .catch((err) => {
+        next(err)
+    })
+}
+
+exports.postBook = (req, res, next) => {
+  const { body } = req;
+  addBook(body)
+    .then((book) => {
+      res.status(201).send({ book });
+    })
+    .catch(next);
+};
