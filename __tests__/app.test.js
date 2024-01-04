@@ -622,6 +622,31 @@ describe("GET /books", () => {
         });
       });
   });
+
+  test("accepts a search query and returns matched results", () => {
+    return request(app)
+      .get("/api/books?search=1984")
+      .expect(200)
+      .then(({ body }) => {
+        const { books } = body;
+        expect(books).toHaveLength(1);
+        books.forEach((book) => {
+          expect(Object.values(book).includes("1984")).toBe(true);
+        });
+      });
+  });
+  test("accepts a search query in combination with a filter query and returns matched results", () => {
+    return request(app)
+      .get("/api/books?search=green&condition=old")
+      .expect(200)
+      .then(({ body }) => {
+        const { books } = body;
+        expect(books).toHaveLength(2);
+        expect(books[0].title).toBe("1984")     
+        });
+      });
+
+
   test("returns 400 bad request when passed an invalid query ", () => {
     return request(app)
       .get("/api/books?dog=woof")
