@@ -2,6 +2,7 @@ const {
   selectSingleBook,
   findBooks,
   addBook,
+  updateBookById,
 } = require("../models/books.models");
 
 exports.getBookById = (req, res, next) => {
@@ -34,3 +35,9 @@ exports.postBook = (req, res, next) => {
     })
     .catch(next);
 };
+
+exports.patchBookById =()=>{
+  console.log('in the controller');
+  updateBookById()
+
+}

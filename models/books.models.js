@@ -73,3 +73,7 @@ exports.addBook = (newBook) => {
     return postedBook;
   });
 };
+
+exports.updateBookById = ()=>{
+  console.log('in the model');
+}

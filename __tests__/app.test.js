@@ -595,3 +595,32 @@ describe("POST /api/books", () => {
       });
   });
 });
+test("PATCH:200 updates location, returns with updated user object", () => {
+    const update = {
+      newLocation: "Liverpool",
+    };
+    const expectedResponse = {
+      _id: "6594007551053b8f385697a3",
+      username: "John Doe",
+      location: "Liverpool",
+      password: "Science Fiction",
+      avatar_img:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
+      bio: "hello my name is username",
+      rating: 0,
+      number_borrowed: 1,
+      number_lent: 2,
+    };
+
+    return request(app)
+      .patch("/api/users/6594007551053b8f385697a3")
+      .send(update)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.user).toMatchObject(expectedResponse);
+      });
+  });
+
+  describe('PATCH /api/books/:id', () => {
+    
+  });

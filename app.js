@@ -1,7 +1,7 @@
 const { getGenres } = require("./controllers/genres.controllers");
 const express = require("express");
 const { getUsers, getUserById, patchUser } = require("./controllers/users.controllers");
-const { getBookById, getBooks, postBook } = require("./controllers/books.controllers");
+const { getBookById, getBooks, postBook, patchBookById } = require("./controllers/books.controllers");
 const { handleCustomErrors, handleServerErrors, handleMongoErrors } = require("./errors/errors");
 const app = express();
 
@@ -17,6 +17,8 @@ app.get("/api/books", getBooks);
 app.get("/api/books/:id", getBookById);
 
 app.post('/api/books', postBook)
+
+app.patch('/api/books:id',patchBookById)
 
 app.get("/api/genres", getGenres);
 
