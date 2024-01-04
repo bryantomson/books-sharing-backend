@@ -1,5 +1,3 @@
-
-    
 const {
   selectSingleBook,
   findBooks,
@@ -27,9 +25,7 @@ exports.getBooks = (req, res, next) => {
       .then((books) => {
         res.status(200).send({ books: books });
       })
-      .catch((err)=>{
-next(err)
-      });
+      .catch(next);
   };
 
   exports.deleteBookById = (req, res, next) => {

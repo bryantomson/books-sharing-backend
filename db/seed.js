@@ -26,7 +26,7 @@ const seedBooks = [
       published_date: "1925-04-10",
       genre: "Classic",
       isbn: "978-0-7432-7356-5",
-      description: 'A nice green book',
+      description: 'A nice book',
       condition: 'New',
       borrow_length: '1 week',
       book_img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU',
@@ -39,7 +39,7 @@ const seedBooks = [
       published_date: "1997-06-26",
       genre: "Fantasy",
       isbn: "978-0-590-35340-3",
-      description: 'A nice brown book',
+      description: 'A nice book',
       condition: 'Old',
       borrow_length: '2 weeks',
       book_img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU',
@@ -261,7 +261,7 @@ const seedDB = async () => {
   await User.insertMany(seedUsers);
   await Message.insertMany(seedMessages);
   await Genre.insertMany(seedGenres);
-  await Book.createIndexes({ "title": "text", "username": "text","author": "text", "published_date": "text", "genre": "text", "isbn": "text", "description": "text", "condition": "text", "borrow_length": "text" })
+  await Book.createIndexes({ "title": "text", "username": "text","author": "text", "published_date": "text", "genre": "text", "isbn": "text", "description": "text", "condition": "text", "borrow_length": "text", })
 };
 
 module.exports = seedDB;

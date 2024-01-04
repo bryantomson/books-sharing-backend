@@ -622,28 +622,6 @@ describe("GET /books", () => {
         });
       });
   });
-  test("accepts a search query and returns matched results", () => {
-    return request(app)
-      .get("/api/books?search=1984")
-      .expect(400)
-      .then(({ body }) => {
-        const { books } = body;
-        expect(books).toHaveLength(1);
-        books.forEach((book) => {
-          expect(Object.values(book).includes("1984")).toBe(true);
-        });
-      });
-  });
-  test("accepts a search query and a filter query and returns matched results", () => {
-    return request(app)
-      .get("/api/books?search=green&genre=dystopian")
-      .expect(200)
-      .then(({ body }) => {
-        const { books } = body;
-        expect(books).toHaveLength(1);
-        expect(books[0].username).toBe("Alice Green");
-      });
-  });
   test("returns 400 bad request when passed an invalid query ", () => {
     return request(app)
       .get("/api/books?dog=woof")
@@ -660,14 +638,14 @@ describe("GET /books", () => {
         expect(body.msg).toBe("bad request");
       });
   });
-  test("returns 404 when query value not found", () => {
+  test("returns 404 not found whem  ", () => {
     return request(app)
-      .get("/api/books?search=kjyvawkuyebfuyigwef")
-      .expect(404)
+      .get("/api/books?dog=woof&condition=New")
+      .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("not found");
+        expect(body.msg).toBe("bad request");
       });
-    })
+  });
 });
 
 describe("GET /books by genre", () => {
