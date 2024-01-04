@@ -76,5 +76,18 @@
         "__v": "0"
       }
     }
+  },
+  "POST /api/genres": {
+    "description": "adds a new genre",
+    "queries": [],
+    "exampleRequestBody": {
+      "genre": "Horror"
+    },
+    "exampleResponse": {
+      "genres": {
+        "_id": "new ObjectId('65943ae82e3aabceb0fc43c3')",
+        "genre": "Horror"
+      }
+    }
   }
 }

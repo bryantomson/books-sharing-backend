@@ -11,6 +11,9 @@ exports.selectGenres = () => {
 };
 
 exports.addGenre = (newGenre) => {
+    if (newGenre.genre && typeof newGenre.genre !== 'string') {
+        return Promise.reject({ status: 400, msg: 'bad request' })
+    }
     const genre = new genreSchema(newGenre);
     return genre.save().then((data) => {
         return data

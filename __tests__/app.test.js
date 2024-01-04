@@ -245,5 +245,41 @@ describe("/api/genres", () => {
         expect(body.msg).toBe("Path `genre` is required.")
       })
   })
-
+  test('POST:400 responds with an error message if genre posted already exists', () => {
+    const newGenre = {
+      genre: "Mystery"
+    }
+    return request(app)
+      .post('/api/genres')
+      .send(newGenre)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('genre already exists')
+      })
+  })
+  test('POST:201 ignores unnecessary fields', () => {
+    const newGenre = {
+      genre: 'Horror',
+      banana: 'banana'
+    }
+    return request(app)
+      .post('/api/genres')
+      .send(newGenre)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.genre.genre).toBe('Horror')
+      })
+  })
+  test('POST:400 responds with an error if the request genre is not a string', () => {
+    const newGenre = {
+      genre: 12
+    }
+    return request(app)
+      .post('/api/genres')
+      .send(newGenre)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('bad request')
+      })
+  })
 })
