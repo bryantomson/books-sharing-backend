@@ -19,3 +19,19 @@ exports.selectUsers = () => {
     return users;
   });
 };
+
+exports.deleteUserById = (id) => {
+  
+  if (id.length !== 24) {
+    return Promise.reject({ status: 400, msg: "bad request" });
+  }
+
+  return User.findByIdAndDelete(id).then((user) => {
+    if (user) {
+      return user;
+    } else {
+      return Promise.reject({ status: 404, msg: "user not found" });
+    }
+  });
+};
+

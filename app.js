@@ -1,5 +1,5 @@
 const express = require("express");
-const { getUsers, getUserById } = require("./controllers/users.controllers");
+const { getUsers, getUserById, deleteUser } = require("./controllers/users.controllers");
 const { getBookById, getBooks } = require("./controllers/books.controllers");
 const { handleCustomErrors, handleServerErrors } = require("./errors/errors");
 const app = express();
@@ -13,6 +13,8 @@ app.get("/api/users/:user_id", getUserById);
 app.get("/api/books", getBooks);
 
 app.get("/books/:id", getBookById);
+
+app.delete("/api/users/:user_id", deleteUser);
 
 app.use(handleCustomErrors);
 app.use(handleServerErrors);
