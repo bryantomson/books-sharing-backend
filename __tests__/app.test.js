@@ -76,7 +76,7 @@ describe("/api/users/:user_id", () => {
   });
 });
 
-describe("GET /books/:id", () => {
+describe("GET /api/books/:id", () => {
   test("200: responds with a single book by given id", () => {
     const expectedBook = {
       _id: "6593f8b7fdb38e563114965f",
@@ -95,7 +95,7 @@ describe("GET /books/:id", () => {
     };
 
     return request(app)
-      .get("/books/6593f8b7fdb38e563114965f")
+      .get("/api/books/6593f8b7fdb38e563114965f")
       .expect(200)
       .then(({ body }) => {
         const { book } = body;
@@ -104,7 +104,7 @@ describe("GET /books/:id", () => {
   });
   test("404: responds with error if book id does not exist", () => {
     return request(app)
-      .get("/books/6593f8b7fdb38e563114965h")
+      .get("/api/books/6593f8b7fdb38e563114965h")
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("book not found");
@@ -112,7 +112,7 @@ describe("GET /books/:id", () => {
   });
   test("400: responds with error if book id does not exist", () => {
     return request(app)
-      .get("/books/doesnotexist")
+      .get("/api/books/doesnotexist")
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("bad request");
@@ -216,6 +216,79 @@ describe("GET /books by genre", () => {
         expect(body[0]["genre"]).toEqual("Mystery");
         expect(body[1]["genre"]).toEqual("Science Fiction");
         expect(body[2]["genre"]).toEqual("Dystopian");
+      });
+  });
+});
+
+describe("POST /api/books", () => {
+  test("201: responds with the added book", () => {
+    const newBook = {
+      title: "Harry Potter and the Goblet of Fire",
+      username: "Beatrizzzz",
+      author: "J. K. Rowling",
+      published_date: "2000-05-30",
+      genre: "Magical Realism",
+      isbn: "978-0-06-112009-1",
+      description: "A fun exciting book",
+      condition: "New",
+      borrow_length: "4 weeks",
+      book_img:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU",
+    };
+    return request(app)
+      .post("/api/books")
+      .send(newBook)
+      .expect(201)
+      .then(({ body }) => {
+        const { book } = body;
+        expect(book).toMatchObject(newBook);
+        expect(typeof book._id).toBe("string");
+      });
+  });
+  test("POST error 400 there are missing properties of the posted book ", () => {
+    const newBook = {
+      username: "Beatrizzzz",
+      author: "J. K. Rowling",
+      published_date: "1999-05-30",
+      genre: "Magical Realism",
+      isbn: "978-0-06-112009-1",
+      description: "A scary spooky book",
+      condition: "New",
+      borrow_length: "3 weeks",
+      book_img:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU",
+    };
+    return request(app)
+      .post("/api/books")
+      .send(newBook)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Path `title` is required.");
+      });
+  });
+  test("POST 201 should add default book img for book when not provided in newBook object ", () => {
+    const newBook = {
+      title: "Harry Potter and the Chamber of Secrets",
+      username: "Beatrizzzz",
+      author: "J. K. Rowling",
+      published_date: "1998-05-30",
+      genre: "Magical Realism",
+      isbn: "978-0-06-142019-1",
+      description: "A short sweet book",
+      condition: "New",
+      borrow_length: "5 weeks",
+    };
+    return request(app)
+      .post("/api/books")
+      .send(newBook)
+      .expect(201)
+      .then(({ body }) => {
+        const { book } = body;
+        expect(book).toMatchObject(newBook);
+        expect(typeof book._id).toBe("string");
+        expect(book.book_img).toBe(
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Book_missing.svg/595px-Book_missing.svg.png"
+        );
       });
   });
 });
