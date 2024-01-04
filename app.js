@@ -1,5 +1,5 @@
 const express = require("express");
-const { getBooks } = require("./controllers/books.controller");
+const { getBooks } = require("./controllers/books.controllers");
 const { handle500, handle404, handle400 } = require("./errors/errors");
 const app = express();
 

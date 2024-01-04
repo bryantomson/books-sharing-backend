@@ -1,5 +1,5 @@
 const Book = require("../db/schema/book-schema");
-const { findBooks } = require("../models/books.model");
+const { findBooks } = require("../models/books.models");
 
 exports.getBooks = (req, res, next) => {
   const queries = req.query;
