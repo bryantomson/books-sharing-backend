@@ -49,6 +49,8 @@ exports.findBooks = (queries) => {
     ...(search && { $text: { $search: search } }),
   };
 
+ console.log(filters,'filters', queries,'query');
+
   for (const key in queries) {
     if (!filters.hasOwnProperty(key) && key !== "search") {
       return Promise.reject({ status: 400, msg: "bad request" });
@@ -56,6 +58,7 @@ exports.findBooks = (queries) => {
   }
 
   return Book.find(filters).then((res) => {
+    console.log(res);
     if (!res.length) {
       return Promise.reject({ status: 404, msg: "not found" });
     } else {
