@@ -74,7 +74,8 @@ exports.deleteBookListing = (id) => {
     } else {
       return Promise.reject({ status: 404, msg: "book not found" });
     }
-
+  })
+}
 exports.addBook = (newBook) => {
   if (!newBook.book_img) {
     newBook.book_img =

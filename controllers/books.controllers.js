@@ -39,15 +39,6 @@ exports.getBooks = (req, res, next) => {
     })
 }
 
-  const queries = req.query;
-
-  findBooks(queries)
-    .then((books) => {
-      res.status(200).send({ books: books });
-    })
-    .catch(next);
-};
-
 exports.postBook = (req, res, next) => {
   const { body } = req;
   addBook(body)
