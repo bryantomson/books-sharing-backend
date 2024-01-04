@@ -2,11 +2,14 @@
   "name": "mongo-test",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "listen.js",
   "scripts": {
     "dev": "nodemon listen.js",
     "test": "jest --detectOpenHandles",
-    "seed": "node ./db/run-seed.js"
+    "seed": "node ./db/run-seed.js",
+    "start": "node listen.js",
+    "seed-prod": "NODE_ENV=production npm run seed"
+
   },
   "keywords": [],
   "author": "",
