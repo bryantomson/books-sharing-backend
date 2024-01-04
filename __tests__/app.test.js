@@ -622,7 +622,7 @@ describe("GET /books", () => {
         });
       });
   });
-  test.only("accepts a search query and returns matched results", () => {
+  test("accepts a search query and returns matched results", () => {
     return request(app)
       .get("/api/books?search=1984")
       .expect(400)
@@ -634,7 +634,7 @@ describe("GET /books", () => {
         });
       });
   });
-  test.only("accepts a search query and a filter query and returns matched results", () => {
+  test("accepts a search query and a filter query and returns matched results", () => {
     return request(app)
       .get("/api/books?search=green&genre=dystopian")
       .expect(200)
@@ -660,7 +660,7 @@ describe("GET /books", () => {
         expect(body.msg).toBe("bad request");
       });
   });
-  test.only("returns 404 when query value not found", () => {
+  test("returns 404 when query value not found", () => {
     return request(app)
       .get("/api/books?search=kjyvawkuyebfuyigwef")
       .expect(404)
