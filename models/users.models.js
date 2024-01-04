@@ -16,9 +16,29 @@ exports.selectUserById = (id) => {
 
 exports.selectUsers = () => {
   return User.find({}).then((users) => {
-    return users;
-  });
-};
+    return users
+  })
+
+}
+
+exports.addUser = (newUser) => {
+
+  newUser.rating = 0
+  newUser.number_borrowed = 0
+  newUser.number_lent = 0
+  if (!newUser.avatar_img) {
+    newUser.avatar_img = 'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-avatar-vector-isolated-on-white-background-png-image_1694546.jpg'
+  }
+  if (!newUser.bio) {
+    newUser.bio = ''
+  }
+  const user = new User(newUser);
+  return user.save().then(() => {
+    return user
+  })
+
+}
+
 
 exports.deleteUserById = (id) => {
   
