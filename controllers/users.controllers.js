@@ -54,7 +54,6 @@ exports.postUser = (req, res, next) => {
       return addUser(newUser);
     })
     .then((user) => {
-      console.log(user)
       res.status(201).send({ user });
     })
     .catch(next)
@@ -84,10 +83,8 @@ exports.postLogin = (req, res, next) => {
 
 exports.getToken = (req, res, next) => {
   const token = req.headers.authorization;
-  console.log(token)
   checkValidToken(token)
     .then((decoded) => {
-      console.log(decoded)
       res.status(200).send('Protected route accessed');
     })
     .catch(next);

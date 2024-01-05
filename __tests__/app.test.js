@@ -50,7 +50,7 @@ describe("/api/users", () => {
         });
       });
   });
-  test.only("POST:201 responds with a new user object", () => {
+  test("POST:201 responds with a new user object", () => {
 
     const newUser = {
       _id: new ObjectId("6594007551053b8f385697ab"),
@@ -67,7 +67,6 @@ describe("/api/users", () => {
       .send(newUser)
       .expect(201)
       .then(({ body }) => {
-        console.log(body.user)
         //password has been replaced with the hashed version
         expect(body.user.password).not.toBe('Art');
         //compares the original password with the hashed password to find match
@@ -173,24 +172,19 @@ describe("/api/users", () => {
 
 describe("/api/users/:user_id", () => {
   test("GET:200 responds with a single user object", () => {
-    const user = {
-      _id: "6594007551053b8f385697a7",
-      username: "Michael Brown",
-      location: "Liverpool",
-      password: "Fantasy",
-      avatar_img:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
-      bio: "hello my name is username",
-      rating: 0,
-      number_borrowed: 1,
-      number_lent: 2,
-    };
-
+   
     return request(app)
       .get("/api/users/6594007551053b8f385697a7")
       .expect(200)
       .then(({ body }) => {
-        expect(body.user).toMatchObject(user);
+        expect(body.user.username).toBe("Michael Brown");
+        expect(body.user.location).toBe("Liverpool");
+        expect(body.user.avatar_img).toBe("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU");
+        expect(body.user.bio).toBe("hello my name is username");
+        expect(body.user.rating).toBe(0);
+        expect(body.user.number_borrowed).toBe(1);
+        expect(body.user.number_lent).toBe(2);
+        
       });
   });
   test("GET:404 responds with an error if the id is valid but user doesn't exist", () => {
@@ -213,35 +207,34 @@ describe("/api/users/:user_id", () => {
     const update = {
       newLocation: "Liverpool",
     };
-    const expectedResponse = {
-      _id: "6594007551053b8f385697a3",
-      username: "John Doe",
-      location: "Liverpool",
-      password: "Science Fiction",
-      avatar_img:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
-      bio: "hello my name is username",
-      rating: 0,
-      number_borrowed: 1,
-      number_lent: 2,
-    }
+
     return request(app)
       .patch("/api/users/6594007551053b8f385697a3")
       .send(update)
       .expect(200)
       .then(({ body }) => {
-        expect(body.user).toMatchObject(expectedResponse);
+        expect(body.user.username).toBe("John Doe");
+        expect(body.user.location).toBe("Liverpool");
+        expect(body.user.avatar_img).toBe("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU");
+        expect(body.user.bio).toBe("hello my name is username");
+        expect(body.user.rating).toBe(0);
+        expect(body.user.number_borrowed).toBe(1);
+        expect(body.user.number_lent).toBe(2);
       });
   })
   test("PATCH:200 updates password, returns with updated user object", () => {
+
+    const hashedPassword = bcrypt.hashSync("fjksaoijhio768", 10);
+
     const update = {
-      newPassword: "fjksaoijhio768",
+      newPassword: hashedPassword,
     };
+
     const expectedResponse = {
       _id: "6594007551053b8f385697a3",
       username: "John Doe",
       location: "Manchester",
-      password: "fjksaoijhio768",
+      password: hashedPassword,
       avatar_img:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
       bio: "hello my name is username",
@@ -263,150 +256,114 @@ describe("/api/users/:user_id", () => {
       newAvatar:
         "https://cdn.iconscout.com/icon/free/png-512/free-avatar-370-456322.png?f=webp&w=512",
     };
-    const expectedResponse = {
-      _id: "6594007551053b8f385697a3",
-      username: "John Doe",
-      location: "Manchester",
-      password: "Science Fiction",
-      avatar_img:
-        "https://cdn.iconscout.com/icon/free/png-512/free-avatar-370-456322.png?f=webp&w=512",
-      bio: "hello my name is username",
-      rating: 0,
-      number_borrowed: 1,
-      number_lent: 2,
-    };
-
+    
     return request(app)
       .patch("/api/users/6594007551053b8f385697a3")
       .send(update)
       .expect(200)
       .then(({ body }) => {
-        expect(body.user).toMatchObject(expectedResponse);
+        expect(body.user.username).toBe("John Doe");
+        expect(body.user.location).toBe("Manchester");
+        expect(body.user.avatar_img).toBe("https://cdn.iconscout.com/icon/free/png-512/free-avatar-370-456322.png?f=webp&w=512");
+        expect(body.user.bio).toBe("hello my name is username");
+        expect(body.user.rating).toBe(0);
+        expect(body.user.number_borrowed).toBe(1);
+        expect(body.user.number_lent).toBe(2);
       });
   });
   test("PATCH:200 updates bio, returns with updated user object", () => {
     const update = {
       newBio: "This my new, updated bio. So cool!",
     };
-    const expectedResponse = {
-      _id: "6594007551053b8f385697a3",
-      username: "John Doe",
-      location: "Manchester",
-      password: "Science Fiction",
-      avatar_img:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
-      bio: "This my new, updated bio. So cool!",
-      rating: 0,
-      number_borrowed: 1,
-      number_lent: 2,
-    };
-
+    
     return request(app)
       .patch("/api/users/6594007551053b8f385697a3")
       .send(update)
       .expect(200)
       .then(({ body }) => {
-        expect(body.user).toMatchObject(expectedResponse);
+        expect(body.user.username).toBe("John Doe");
+        expect(body.user.location).toBe("Manchester");
+        expect(body.user.avatar_img).toBe("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU");
+        expect(body.user.bio).toBe("This my new, updated bio. So cool!");
+        expect(body.user.rating).toBe(0);
+        expect(body.user.number_borrowed).toBe(1);
+        expect(body.user.number_lent).toBe(2);
       });
   });
   test("PATCH:200 increases rating by 1, returns with updated user object", () => {
     const update = {
       incrementRating: 1,
     };
-    const expectedResponse = {
-      _id: "6594007551053b8f385697a3",
-      username: "John Doe",
-      location: "Manchester",
-      password: "Science Fiction",
-      avatar_img:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
-      bio: "hello my name is username",
-      rating: 1,
-      number_borrowed: 1,
-      number_lent: 2,
-    };
-
+    
     return request(app)
       .patch("/api/users/6594007551053b8f385697a3")
       .send(update)
       .expect(200)
       .then(({ body }) => {
-        expect(body.user).toMatchObject(expectedResponse);
+        expect(body.user.username).toBe("John Doe");
+        expect(body.user.location).toBe("Manchester");
+        expect(body.user.avatar_img).toBe("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU");
+        expect(body.user.bio).toBe("hello my name is username");
+        expect(body.user.rating).toBe(1);
+        expect(body.user.number_borrowed).toBe(1);
+        expect(body.user.number_lent).toBe(2);
       });
   });
   test("PATCH:200 changes rating by any number, returns with updated user object", () => {
     const update = {
       incrementRating: -1,
     };
-    const expectedResponse = {
-      _id: "6594007551053b8f385697a3",
-      username: "John Doe",
-      location: "Manchester",
-      password: "Science Fiction",
-      avatar_img:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
-      bio: "hello my name is username",
-      rating: -1,
-      number_borrowed: 1,
-      number_lent: 2,
-    };
-
+ 
     return request(app)
       .patch("/api/users/6594007551053b8f385697a3")
       .send(update)
       .expect(200)
       .then(({ body }) => {
-        expect(body.user).toMatchObject(expectedResponse);
+        expect(body.user.username).toBe("John Doe");
+        expect(body.user.location).toBe("Manchester");
+        expect(body.user.avatar_img).toBe("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU");
+        expect(body.user.bio).toBe("hello my name is username");
+        expect(body.user.rating).toBe(-1);
+        expect(body.user.number_borrowed).toBe(1);
+        expect(body.user.number_lent).toBe(2);
       });
   });
   test("PATCH:200 increases number_borrowed by 1, returns with updated user object", () => {
     const update = {
       incrementBorrowed: 1,
     };
-    const expectedResponse = {
-      _id: "6594007551053b8f385697a3",
-      username: "John Doe",
-      location: "Manchester",
-      password: "Science Fiction",
-      avatar_img:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
-      bio: "hello my name is username",
-      rating: 0,
-      number_borrowed: 2,
-      number_lent: 2,
-    };
-
+   
     return request(app)
       .patch("/api/users/6594007551053b8f385697a3")
       .send(update)
       .expect(200)
       .then(({ body }) => {
-        expect(body.user).toMatchObject(expectedResponse);
+        expect(body.user.username).toBe("John Doe");
+        expect(body.user.location).toBe("Manchester");
+        expect(body.user.avatar_img).toBe("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU");
+        expect(body.user.bio).toBe("hello my name is username");
+        expect(body.user.rating).toBe(0);
+        expect(body.user.number_borrowed).toBe(2);
+        expect(body.user.number_lent).toBe(2);
       });
   });
   test("PATCH:200 increases lent by 1, returns with updated user object", () => {
     const update = {
       incrementLent: 1,
     };
-    const expectedResponse = {
-      _id: "6594007551053b8f385697a3",
-      username: "John Doe",
-      location: "Manchester",
-      password: "Science Fiction",
-      avatar_img:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
-      bio: "hello my name is username",
-      rating: 0,
-      number_borrowed: 1,
-      number_lent: 3,
-    };
 
     return request(app)
       .patch("/api/users/6594007551053b8f385697a3")
       .send(update)
       .expect(200)
       .then(({ body }) => {
-        expect(body.user).toMatchObject(expectedResponse);
+        expect(body.user.username).toBe("John Doe");
+        expect(body.user.location).toBe("Manchester");
+        expect(body.user.avatar_img).toBe("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU");
+        expect(body.user.bio).toBe("hello my name is username");
+        expect(body.user.rating).toBe(0);
+        expect(body.user.number_borrowed).toBe(1);
+        expect(body.user.number_lent).toBe(3);
       });
   });
   test("PATCH:200 updates multiple properties for an existing user", () => {
@@ -846,12 +803,12 @@ describe("POST /api/books", () => {
 
 describe("POST: /api/login", () => {
   test('POST: 201 post login info', () => {
-    return request(app)
+
+    return request(app)   
       .post("/api/login")
       .send({ username: 'John Doe', password: 'Fiction' })
       .expect(200)
       .then(({ body }) => {
-        console.log(body)
         expect(body.token).toBeDefined()
       })
   });

@@ -25,20 +25,46 @@ exports.selectUsers = () => {
 
 exports.addUser = (newUser) => {
 
-  const hashedPassword = bcrypt.hashSync(newUser.password, 10);
+  if (!newUser.password) {
+    return Promise.reject({ status: 400, msg: "Path `password` is required." });
+  }
 
-  newUser.rating = 0
-  newUser.number_borrowed = 0
-  newUser.number_lent = 0
-  newUser.password = hashedPassword
+  const saltRounds = 10;
+
   
-  if (!newUser.avatar_img) {
-    newUser.avatar_img = 'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-avatar-vector-isolated-on-white-background-png-image_1694546.jpg'
-  }
-  if (!newUser.bio) {
-    newUser.bio = ''
-  }
-}
+  return new Promise((resolve, reject) => {
+    
+    bcrypt.hash(newUser.password, saltRounds, (err, hashedPassword) => {
+      if (err) {
+        console.error('Error during password hashing:', err);
+        reject(err);
+      } else {
+
+        newUser.rating = 0;
+        newUser.number_borrowed = 0;
+        newUser.number_lent = 0;
+        newUser.password = hashedPassword;
+ 
+
+        if (!newUser.avatar_img) {
+          newUser.avatar_img =
+            'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-avatar-vector-isolated-on-white-background-png-image_1694546.jpg';
+        }
+
+        if (!newUser.bio) {
+          newUser.bio = '';
+        }
+
+        const user = new User(newUser);
+        user.save()
+          .then(() => resolve(user))
+          .catch((saveError) => {
+            reject(saveError);
+          });
+      }
+    });
+  });
+};
 
 
 exports.deleteUserById = (id) => {
@@ -127,7 +153,6 @@ exports.checkValidToken = (token) => {
         }
       });
     } else {
-      console.log('got here')
       reject({ status: 401, msg: "Token not provided" });
     }
   });
