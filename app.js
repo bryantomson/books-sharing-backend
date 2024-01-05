@@ -18,6 +18,7 @@ const {
   handleCustomErrors,
   handleServerErrors,
   handleMongoErrors,
+  handle404s,
 } = require("./errors/errors");
 
 const app = express();
@@ -53,6 +54,7 @@ app.delete("/api/books/:book_id", deleteBookById);
 
 app.delete("/api/users/:user_id", deleteUser);
 
+app.all('/*',handle404s)
 app.use(handleMongoErrors);
 app.use(handleCustomErrors);
 app.use(handleMongoErrors);

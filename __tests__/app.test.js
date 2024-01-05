@@ -24,6 +24,14 @@ describe("GET /api", () => {
         expect(body.endpoints).toEqual(listOfEndpoints);
       });
   });
+  test("Error 404: returns an error 404 for a route that does not exist", () => {
+    return request(app)
+      .get("/api/invalidpath")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Not found");
+      });
+  });
 });
 
 describe("/api/users", () => {
