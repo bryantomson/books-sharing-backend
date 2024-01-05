@@ -74,7 +74,7 @@ exports.addBook = (newBook) => {
   });
 };
 
-exports.updateBookById = async (book,request)=>{
+exports.updateBookById = (book,request)=>{
   const validUpdates = [
     "newTitle",
     "newAuthor",
