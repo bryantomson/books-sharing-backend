@@ -63,7 +63,6 @@ exports.findBooks = (queries) => {
         return res;
       }
     })
-    .catch((next) => {});
 };
 
 exports.deleteBookListing = (id) => {

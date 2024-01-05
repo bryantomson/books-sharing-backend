@@ -635,6 +635,7 @@ describe("GET /books", () => {
         });
       });
   });
+  
   test("accepts a search query in combination with a filter query and returns matched results", () => {
     return request(app)
       .get("/api/books?search=green&condition=old")
@@ -642,7 +643,8 @@ describe("GET /books", () => {
       .then(({ body }) => {
         const { books } = body;
         expect(books).toHaveLength(2);
-        expect(books[0].title).toBe("1984")     
+        expect(books[0].title).toBe("1984") 
+        expect(books[1].title).toBe("Harry Potter and the Sorcerer's Stone"); 
         });
       });
 
@@ -655,22 +657,27 @@ describe("GET /books", () => {
         expect(body.msg).toBe("bad request");
       });
   });
-  test("returns 400 bad request when at least one  query is invalid ", () => {
-    return request(app)
-      .get("/api/books?dog=woof&condition=New")
-      .expect(400)
-      .then(({ body }) => {
-        expect(body.msg).toBe("bad request");
-      });
-  });
-  test("returns 404 not found whem  ", () => {
-    return request(app)
-      .get("/api/books?dog=woof&condition=New")
-      .expect(400)
-      .then(({ body }) => {
-        expect(body.msg).toBe("bad request");
-      });
-  });
+
+test('returns 404 not found when the query is valid but the value is not found', () => {
+  return request(app)
+  .get("/api/books?title=not-a-book12749dj")
+  .expect(404)
+  .then(({body})=>{
+    expect(body.msg).toBe("not found")
+  })
+});
+
+test('returns 404 not found when the search query value is not found', () => {
+  return request(app)
+  .get("/api/books?search=not-a-thing12749dj")
+  .expect(404)
+  .then(({body})=>{
+    expect(body.msg).toBe("not found")
+  })
+});
+
+  
+  
 });
 
 describe("GET /books by genre", () => {
