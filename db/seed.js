@@ -39,7 +39,7 @@ const seedBooks = [
     published_date: "1997-06-26",
     genre: "Fantasy",
     isbn: "978-0-590-35340-3",
-    description: "A nice book",
+    description: "A nice green book",
     condition: "Old",
     borrow_length: "2 weeks",
     book_img:
@@ -52,7 +52,7 @@ const seedBooks = [
     published_date: "1937-09-21",
     genre: "Fantasy",
     isbn: "978-0-261-10295-2",
-    description: "A nice book",
+    description: "A nice green book",
     condition: "New",
     borrow_length: "1 week",
     book_img:
@@ -257,7 +257,6 @@ const seedGenres = [
 ];
 
 const seedDB = async () => {
-  await Book.collection.dropIndexes();
   await Book.deleteMany({});
   await User.deleteMany({});
   await Message.deleteMany({});
@@ -266,17 +265,6 @@ const seedDB = async () => {
   await User.insertMany(seedUsers);
   await Message.insertMany(seedMessages);
   await Genre.insertMany(seedGenres);
-  await Book.createIndexes({
-    title: "text",
-    username: "text",
-    author: "text",
-    published_date: "text",
-    genre: "text",
-    isbn: "text",
-    description: "text",
-    condition: "text",
-    borrow_length: "text",
-  });
 };
 
 module.exports = seedDB;
