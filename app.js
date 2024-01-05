@@ -6,6 +6,8 @@ const {
   patchUser,
   postUser,
   deleteUser,
+  postLogin,
+  getToken
 } = require("./controllers/users.controllers");
 const {
   getBookById,
@@ -46,6 +48,10 @@ app.post("/api/genres", postGenres);
 app.delete("/api/books/:book_id", deleteBookById);
 
 app.delete("/api/users/:user_id", deleteUser);
+
+app.post('/api/login', postLogin)
+
+app.get('/api/protected', getToken)
 
 app.use(handleMongoErrors);
 app.use(handleCustomErrors);

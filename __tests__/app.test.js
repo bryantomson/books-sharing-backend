@@ -1,11 +1,26 @@
 const request = require("supertest");
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const app = require("../app.js");
 const db = require("../db/connection.js");
 const seed = require("../db/seed.js");
 const { ObjectId } = require("mongodb");
+let authToken;
 
 beforeEach(() => {
-  return seed();
+  return seed()
+  //logs in so that a webtoken can be generated for testing the /api/protected endpoint
+    .then(() => {
+      const testUser = { username: 'John Doe', password: 'Fiction' };
+
+      return request(app)
+        .post("/api/login")
+        .send(testUser)
+        .expect(200)
+        .then(({body}) => {
+          authToken = body.token
+        })
+    })
 });
 
 afterAll(() => {
@@ -35,7 +50,8 @@ describe("/api/users", () => {
         });
       });
   });
-  test("POST:201 responds with a new user object", () => {
+  test.only("POST:201 responds with a new user object", () => {
+
     const newUser = {
       _id: new ObjectId("6594007551053b8f385697ab"),
       username: "Bob Ross",
@@ -45,15 +61,21 @@ describe("/api/users", () => {
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
       bio: "hello my name is username",
     };
+
     return request(app)
       .post("/api/users")
       .send(newUser)
       .expect(201)
       .then(({ body }) => {
+        console.log(body.user)
+        //password has been replaced with the hashed version
+        expect(body.user.password).not.toBe('Art');
+        //compares the original password with the hashed password to find match
+        expect(bcrypt.compare('Art', body.user.password)).resolves.toBe(true);
+
         expect(body.user._id).toBe("6594007551053b8f385697ab");
         expect(body.user.username).toBe("Bob Ross");
         expect(body.user.location).toBe("Liverpool");
-        expect(body.user.password).toBe("Art");
         expect(body.user.avatar_img).toBe(
           "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU"
         );
@@ -821,4 +843,66 @@ describe("POST /api/books", () => {
       });
   });
 });
+
+describe("POST: /api/login", () => {
+  test('POST: 201 post login info', () => {
+    return request(app)
+      .post("/api/login")
+      .send({ username: 'John Doe', password: 'Fiction' })
+      .expect(200)
+      .then(({ body }) => {
+        console.log(body)
+        expect(body.token).toBeDefined()
+      })
+  });
+  test('POST: 401 incorrect password', () => {
+    return request(app)
+      .post("/api/login")
+      .send({ username: 'John Doe', password: 'incorrect' })
+      .expect(401)
+  });
+  test('POST: 404 user does not exist', () => {
+    return request(app)
+      .post("/api/login")
+      .send({ username: 'King Richard III', password: 'incorrect' })
+      .expect(404)
+  });
+})
+
+describe("GET: /api/protected", () => {
+  test('should return 200 and "Protected route accessed" with a valid token', (done) => {
+
+    request(app)
+      .get('/api/protected')
+      .set('Authorization', authToken)
+      .expect(200)
+      .expect('Protected route accessed', done);
+  });
+  test('should return 401 and "Invalid token" if given non existant token', (done) => {
+    const fakeToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNzA0NDUyNjU0fQ.Yp4wqddmJbAM9L2nav951pX4XP7v7mXoGeDmoPFg8bs'
+    request(app)
+      .get('/api/protected')
+      .set('Authorization', fakeToken)
+      .expect(401)
+      .end((err, res) => {
+        if (err) return done(err);
+        
+        expect(res.body.msg).toBe("Invalid token");
+        done();
+      });
+  });
+  test('should return 401 and "Token not provided" if no token is provided', (done) => {
+   let fakeToken = ''
+    request(app)
+      .get('/api/protected')
+      .set('Authorization', fakeToken)
+      .expect(401)
+      .end((err, res) => {
+        if (err) return done(err);
+        
+        expect(res.body.msg).toBe("Token not provided");
+        done();
+      });
+  });
+})
 

@@ -1,4 +1,6 @@
 const User = require("../db/schema/user-schema");
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 exports.selectUserById = (id) => {
   if (id.length !== 24) {
@@ -23,20 +25,19 @@ exports.selectUsers = () => {
 
 exports.addUser = (newUser) => {
 
+  const hashedPassword = bcrypt.hashSync(newUser.password, 10);
+
   newUser.rating = 0
   newUser.number_borrowed = 0
   newUser.number_lent = 0
+  newUser.password = hashedPassword
+  
   if (!newUser.avatar_img) {
     newUser.avatar_img = 'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-avatar-vector-isolated-on-white-background-png-image_1694546.jpg'
   }
   if (!newUser.bio) {
     newUser.bio = ''
   }
-  const user = new User(newUser);
-  return user.save().then(() => {
-    return user
-  })
-
 }
 
 
@@ -99,3 +100,35 @@ exports.updateUser = (user, request) => {
   });
 };
 
+exports.authenticateLogin = (username,password) => {
+  return User.findOne({ username })
+    .then((user) => {
+      if (user) {
+        const isPasswordValid = bcrypt.compareSync(password, user.password);
+        if (isPasswordValid) {
+          return user;
+        } else {
+          return Promise.reject({ status: 401, msg: "incorrect password" });
+        }
+      } else {
+        return Promise.reject({ status: 404, msg: "user not found" });
+      }
+    })
+};
+
+exports.checkValidToken = (token) => {
+  return new Promise((resolve, reject) => {
+    if (token) {
+      jwt.verify(token, 'secret-key', (err, decoded) => {
+        if (err) {
+          reject({ status: 401, msg: "Invalid token" });
+        } else {
+          resolve(decoded)
+        }
+      });
+    } else {
+      console.log('got here')
+      reject({ status: 401, msg: "Token not provided" });
+    }
+  });
+};

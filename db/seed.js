@@ -3,6 +3,8 @@ const Book = require("./schema/book-schema.js")
 const User = require("./schema/user-schema.js")
 const Message = require('./schema/message-schema.js')
 const Genre = require('./schema/genre-schema.js')
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const seedBooks = [
     {
@@ -104,7 +106,7 @@ const seedUsers = [
     _id: new ObjectId('6594007551053b8f385697a3'),
     username: "John Doe",
     location: "Manchester",
-    password: "Science Fiction",
+    password: bcrypt.hashSync('Fiction', 10),
     avatar_img:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
     bio: "hello my name is username",
@@ -116,7 +118,7 @@ const seedUsers = [
     _id: new ObjectId('6594007551053b8f385697a4'),
     username: "Jane Smith",
     location: "Leeds",
-    password: "Fiction",
+    password: bcrypt.hashSync('Fiction', 10),
     avatar_img:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
     bio: "hello my name is username",
@@ -128,7 +130,7 @@ const seedUsers = [
     _id: new ObjectId('6594007551053b8f385697a5'),
     username: "Bob Johnson",
     location: 'Liverpool',
-    password: "Liverpool",
+    password: bcrypt.hashSync('Liverpool', 10),
     avatar_img:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
     bio: "hello my name is username",
@@ -140,7 +142,7 @@ const seedUsers = [
     _id: new ObjectId('6594007551053b8f385697a6'),
     username: "Emily White",
     location: 'Manchester',
-    password: "Leeds",
+    password: bcrypt.hashSync('Leeds', 10),
     avatar_img:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
     bio: "hello my name is username",
@@ -152,7 +154,7 @@ const seedUsers = [
     _id: new ObjectId('6594007551053b8f385697a7'),
     username: "Michael Brown",
     location: "Liverpool",
-    password: "Fantasy",
+    password: bcrypt.hashSync('Fantasy', 10),
     avatar_img:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
     bio: "hello my name is username",
@@ -164,7 +166,7 @@ const seedUsers = [
     _id: new ObjectId('6594007551053b8f385697a8'),
     username: "Alice Green",
     location: "Liverpool",
-    password: "Dystopian",
+    password: bcrypt.hashSync('Dystopian', 10),
     avatar_img:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
     bio: "hello my name is username",
@@ -176,7 +178,7 @@ const seedUsers = [
     _id: new ObjectId('6594007551053b8f385697a9'),
     username: "David Black",
     location: 'London',
-    password: "Leeds",
+    password: bcrypt.hashSync('Leeds', 10),
     avatar_img:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
     bio: "hello my name is username",
@@ -188,7 +190,7 @@ const seedUsers = [
     _id: new ObjectId('6594007551053b8f385697aa'),
     username: "Sarah Blue",
     location: "Liverpool",
-    password: "Magical Realism",
+    password: bcrypt.hashSync('Magical Realism', 10),
     avatar_img:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
     bio: "hello my name is username",
