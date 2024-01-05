@@ -203,6 +203,19 @@
       ]
     }
   },
+  "GET /api/messages/:username": {
+    "description": "serves an array of all the user's conversations",
+    "queries": [],
+    "exampleRequest": "/api/messages/David%20Black",
+    "exampleResponse": {
+      "conversations": [
+        {
+          "with": "Emily White",
+          "timestamp": "2023-12-31T13:40:00"
+        }
+      ]
+    }
+  },
   "PATCH /api/books/:id": {
     "description": "patches an existing book object with the requested book ID, responds with the updated book object",
     "validRequestBodyProperties": [

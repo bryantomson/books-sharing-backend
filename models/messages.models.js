@@ -1,4 +1,5 @@
 const Message = require("../db/schema/message-schema");
+const { formatConversations } = require("../utils/utils");
 
 exports.selectMessages = (users) => {
   if (!users) {
@@ -18,4 +19,10 @@ exports.selectMessages = (users) => {
         return data;
       }
     });
+};
+
+exports.selectConversations = (username) => {
+  return Message.find({ between: username }).then((data) => {
+    return formatConversations(username, data);
+  });
 };

@@ -926,6 +926,56 @@ describe("/api/messages?users=...", () => {
   });
 });
 
+describe("/api/messages/:username", () => {
+  test("GET:200 serves an array of all conversations for a username with most recent conversation first", () => {
+    return request(app)
+      .get("/api/messages/David%20Black")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.conversations).toHaveLength(2);
+        expect(body.conversations).toBeSortedBy("timestamp", {
+          descending: true,
+        });
+        body.conversations.forEach((conversation) => {
+          expect(conversation).toMatchObject({
+            with: expect.any(String),
+            timestamp: expect.any(String),
+          });
+        });
+      });
+  });
+  test("GET:200 serves an array of all conversations for a different user", () => {
+    return request(app)
+      .get("/api/messages/Sarah%20Blue")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.conversations).toHaveLength(1);
+        body.conversations.forEach((conversation) => {
+          expect(conversation).toMatchObject({
+            with: expect.any(String),
+            timestamp: expect.any(String),
+          });
+        });
+      });
+  });
+  test("GET:200 serves an empty array if user exists but has no conversations", () => {
+    return request(app)
+      .get("/api/messages/Bob%20Johnson")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.conversations).toEqual([]);
+      });
+  });
+  test("GET:404 responds with an error if the username is not found", () => {
+    return request(app)
+      .get("/api/messages/Bob%20Ross")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("user not found");
+      });
+  });
+});
+
 describe("PATCH /api/books/:id", () => {
   test("PATCH:200 updates book condition, returns with updated book object", () => {
     const update = {
