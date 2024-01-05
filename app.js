@@ -18,10 +18,13 @@ const {
   handleServerErrors,
   handleMongoErrors,
 } = require("./errors/errors");
+const {
+  getMessages,
+  getConversations,
+} = require("./controllers/messages.controllers");
 
 const app = express();
 const db = require("./db/connection"); // this is necessary for the connection file to run, do not delete
-const { getMessages } = require("./controllers/messages.controllers");
 
 app.use(express.json());
 
@@ -48,6 +51,8 @@ app.delete("/api/books/:book_id", deleteBookById);
 app.delete("/api/users/:user_id", deleteUser);
 
 app.get("/api/messages", getMessages);
+
+app.get("/api/messages/:username", getConversations);
 
 app.use(handleCustomErrors);
 app.use(handleMongoErrors);

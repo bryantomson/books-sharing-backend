@@ -219,12 +219,12 @@ const seedMessages = [
   {
     between: ["David Black", "Sarah Blue"],
     from: "David Black",
-    timestamp: "2023-12-31T13:40:00",
+    timestamp: "2023-12-31T13:41:00",
     body: "I am good Sarah",
   },
   {
     between: ["David Black", "Emily White"],
-    from: "Alice Green",
+    from: "Emily White",
     timestamp: "2023-12-31T13:40:00",
     body: "Hello, is anyone there?",
   },

@@ -196,9 +196,22 @@
       "messages": [
         {
           "between": ["David Black", "Emily White"],
-          "from": "Alice Green",
+          "from": "David Black",
           "timestamp": "2023-12-31T13:40:00",
           "body": "Hello, is anyone there?"
+        }
+      ]
+    }
+  },
+  "GET /api/messages/:username": {
+    "description": "serves an array of all the user's conversations",
+    "queries": [],
+    "exampleRequest": "/api/messages/David%20Black",
+    "exampleResponse": {
+      "conversations": [
+        {
+          "with": "Emily White",
+          "timestamp": "2023-12-31T13:40:00"
         }
       ]
     }

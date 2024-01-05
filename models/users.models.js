@@ -14,34 +14,34 @@ exports.selectUserById = (id) => {
   });
 };
 
-exports.selectUsers = () => {
-  return User.find({}).then((users) => {
-    return users
-  })
-
-}
+exports.selectUsers = (username) => {
+  const filters = {};
+  if (username) {
+    filters.username = username;
+  }
+  return User.find(filters).then((users) => {
+    return users;
+  });
+};
 
 exports.addUser = (newUser) => {
-
-  newUser.rating = 0
-  newUser.number_borrowed = 0
-  newUser.number_lent = 0
+  newUser.rating = 0;
+  newUser.number_borrowed = 0;
+  newUser.number_lent = 0;
   if (!newUser.avatar_img) {
-    newUser.avatar_img = 'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-avatar-vector-isolated-on-white-background-png-image_1694546.jpg'
+    newUser.avatar_img =
+      "https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-avatar-vector-isolated-on-white-background-png-image_1694546.jpg";
   }
   if (!newUser.bio) {
-    newUser.bio = ''
+    newUser.bio = "";
   }
   const user = new User(newUser);
   return user.save().then(() => {
-    return user
-  })
-
-}
-
+    return user;
+  });
+};
 
 exports.deleteUserById = (id) => {
-  
   if (id.length !== 24) {
     return Promise.reject({ status: 400, msg: "bad request" });
   }
@@ -54,7 +54,6 @@ exports.deleteUserById = (id) => {
     }
   });
 };
-
 
 exports.updateUser = (user, request) => {
   const validUpdates = [
@@ -98,4 +97,3 @@ exports.updateUser = (user, request) => {
     return patchedUser;
   });
 };
-
