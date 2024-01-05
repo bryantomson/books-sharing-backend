@@ -127,5 +127,37 @@
         }
       ]
     }
+  },
+  "PATCH /api/books/:id": {
+    "description": "patches an existing book object with the requested book ID, responds with the updated book object",
+    "validRequestBodyProperties": [
+      "title",
+    "author",
+    "published_date",
+    "genre",
+    "isbn",
+    "description",
+    "condition",
+    "borrow_length",
+    "book_img"
+    ],
+    "exampleRequestBody": {
+      "genre": "Fiction",
+      "description": "A really intereting book about space"
+    },
+    "exampleResponse": {
+      "_id": "6593f8b7fdb38e563114965f",
+      "title": "The Hitchhiker's Guide to the Galaxy",
+      "author": "Douglas Adams",
+      "username": "John Doe",
+      "published_date": "1979-10-12",
+      "genre": "Fiction",
+      "isbn": "978-0-345-39180-3",
+      "description": "A really intereting book about space",
+      "condition": "Old",
+      "borrow_length": "2 weeks",
+      "book_img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU",
+      "__v": "0"
+    }
   }
 }

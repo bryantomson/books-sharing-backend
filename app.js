@@ -18,7 +18,7 @@ app.get("/api/books/:id", getBookById);
 
 app.post('/api/books', postBook)
 
-app.patch('/api/books:id',patchBookById)
+app.patch('/api/books/:id',patchBookById)
 
 app.get("/api/genres", getGenres);
 

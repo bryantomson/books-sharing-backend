@@ -595,32 +595,129 @@ describe("POST /api/books", () => {
       });
   });
 });
-test("PATCH:200 updates location, returns with updated user object", () => {
-    const update = {
-      newLocation: "Liverpool",
-    };
-    const expectedResponse = {
-      _id: "6594007551053b8f385697a3",
-      username: "John Doe",
-      location: "Liverpool",
-      password: "Science Fiction",
-      avatar_img:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU",
-      bio: "hello my name is username",
-      rating: 0,
-      number_borrowed: 1,
-      number_lent: 2,
-    };
 
-    return request(app)
-      .patch("/api/users/6594007551053b8f385697a3")
-      .send(update)
-      .expect(200)
-      .then(({ body }) => {
-        expect(body.user).toMatchObject(expectedResponse);
-      });
-  });
 
   describe('PATCH /api/books/:id', () => {
-    
+    test("PATCH:200 updates book condition, returns with updated book object", () => {
+      const update = {
+        newCondition: 'New',
+      };
+      const expectedResponse = {
+        _id: '6593f8b7fdb38e563114965f',
+        title: "The Hitchhiker's Guide to the Galaxy",
+        author: 'Douglas Adams',
+        username: 'John Doe',
+        published_date: '1979-10-12',
+        genre: 'Science Fiction',
+        isbn: '978-0-345-39180-3',
+        description: 'A nice book',
+        condition: 'New',
+        borrow_length: '2 weeks',
+        book_img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU',
+        __v: 0
+      }
+  
+      return request(app)
+        .patch("/api/books/6593f8b7fdb38e563114965f")
+        .send(update)
+        .expect(200)
+        .then(({ body }) => {
+          const {book} = body
+          expect(book).toMatchObject(expectedResponse);
+        });
+    });
+    test("PATCH:200 updates book borrow_length, returns with updated book object", () => {
+      const update = {
+        newBorrow_length: '1 week',
+      };
+      const expectedResponse = {
+        _id: '6593f8b7fdb38e563114965f',
+        title: "The Hitchhiker's Guide to the Galaxy",
+        author: 'Douglas Adams',
+        username: 'John Doe',
+        published_date: '1979-10-12',
+        genre: 'Science Fiction',
+        isbn: '978-0-345-39180-3',
+        description: 'A nice book',
+        condition: 'Old',
+        borrow_length: '1 week',
+        book_img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU',
+        __v: 0
+      }
+  
+      return request(app)
+        .patch("/api/books/6593f8b7fdb38e563114965f")
+        .send(update)
+        .expect(200)
+        .then(({ body }) => {
+          const {book} = body
+          expect(book).toMatchObject(expectedResponse);
+        });
+    });
+    test("PATCH:200 updates book 2 properties of a book returns with updated book object", () => {
+      const update = {
+        newGenre: 'Fiction',
+        newDescription: 'A really intereting book about space',
+      };
+      const expectedResponse = {
+        _id: '6593f8b7fdb38e563114965f',
+        title: "The Hitchhiker's Guide to the Galaxy",
+        author: 'Douglas Adams',
+        username: 'John Doe',
+        published_date: '1979-10-12',
+        genre: 'Fiction',
+        isbn: '978-0-345-39180-3',
+        description: 'A really intereting book about space',
+        condition: 'Old',
+        borrow_length: '2 weeks',
+        book_img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU',
+        __v: 0
+      }
+  
+      return request(app)
+        .patch("/api/books/6593f8b7fdb38e563114965f")
+        .send(update)
+        .expect(200)
+        .then(({ body }) => {
+          const {book} = body
+          expect(book).toMatchObject(expectedResponse);
+        });
+    });
+    test("PATCH:400 responds with an error if the data types in request body are invalid", () => {
+      const update = {
+        newGenre: 7,
+      };
+  
+      return request(app)
+        .patch("/api/books/6593f8b7fdb38e563114965f")
+        .send(update)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("bad request");
+        });
+    });
+    test("PATCH:400 responds with an error if the key is invalid in request body", () => {
+      const update = {
+        newDog: "woof",
+      };
+  
+      return request(app)
+        .patch("/api/books/6593f8b7fdb38e563114965f")
+        .send(update)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("bad request");
+        });
+    });
+    test("PATCH:400 responds with an error if the request body is empty", () => {
+      const update = {};
+  
+      return request(app)
+        .patch("/api/books/6593f8b7fdb38e563114965f")
+        .send(update)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("bad request");
+        });
+    });
   });

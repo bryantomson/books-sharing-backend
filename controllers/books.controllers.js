@@ -36,8 +36,14 @@ exports.postBook = (req, res, next) => {
     .catch(next);
 };
 
-exports.patchBookById =()=>{
-  console.log('in the controller');
-  updateBookById()
-
+exports.patchBookById =(req,res,next)=>{
+  const {id} = req.params
+  selectSingleBook(id)
+  .then((book)=>{
+    return updateBookById(book, req.body)
+  })
+  .then((book)=>{
+res.status(200).send({book})
+  })
+   .catch(next)
 }
