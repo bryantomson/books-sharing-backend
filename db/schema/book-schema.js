@@ -43,4 +43,16 @@ const booksSchema = new mongoose.Schema({
   }
 });
 
+booksSchema.index({
+  title: "text",
+  username: "text",
+  author: "text",
+  published_date: "text",
+  genre: "text",
+  isbn: "text",
+  description: "text",
+  condition: "text",
+  borrow_length: "text",
+});
+
 module.exports = mongoose.model("Book", booksSchema);
