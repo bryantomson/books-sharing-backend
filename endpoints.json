@@ -1,4 +1,7 @@
 {
+  "GET /api": {
+    "description": "serves up a json representation of all the available endpoints of the api"
+  },
   "GET /api/users/:user_id": {
     "description": "serves a single user object with the requested user ID",
     "queries": [],

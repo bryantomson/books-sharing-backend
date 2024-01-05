@@ -21,10 +21,13 @@ const {
 } = require("./errors/errors");
 
 const app = express();
-const db = require("./db/connection") // this is necessary for the connection file to run, do not delete
+const db = require("./db/connection"); // this is necessary for the connection file to run, do not delete
+const { getEndpoints } = require("./controllers/app.controllers");
 
 
 app.use(express.json());
+
+app.get('/api',getEndpoints)
 
 app.get("/api/users", getUsers);
 app.post("/api/users", postUser);
