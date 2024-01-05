@@ -622,6 +622,32 @@ describe("GET /books", () => {
         });
       });
   });
+
+  test("accepts a search query and returns matched results", () => {
+    return request(app)
+      .get("/api/books?search=1984")
+      .expect(200)
+      .then(({ body }) => {
+        const { books } = body;
+        expect(books).toHaveLength(1);
+        books.forEach((book) => {
+          expect(Object.values(book).includes("1984")).toBe(true);
+        });
+      });
+  });
+
+  test("accepts a search query in combination with a filter query and returns matched results", () => {
+    return request(app)
+      .get("/api/books?search=green&condition=old")
+      .expect(200)
+      .then(({ body }) => {
+        const { books } = body;
+        expect(books).toHaveLength(2);
+        expect(books[0].title).toBe("1984");
+        expect(books[1].title).toBe("Harry Potter and the Sorcerer's Stone");
+      });
+  });
+
   test("returns 400 bad request when passed an invalid query ", () => {
     return request(app)
       .get("/api/books?dog=woof")
@@ -630,20 +656,22 @@ describe("GET /books", () => {
         expect(body.msg).toBe("bad request");
       });
   });
-  test("returns 400 bad request when at least one  query is invalid ", () => {
+
+  test("returns 404 not found when the query is valid but the value is not found", () => {
     return request(app)
-      .get("/api/books?dog=woof&condition=New")
-      .expect(400)
+      .get("/api/books?title=not-a-book12749dj")
+      .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("bad request");
+        expect(body.msg).toBe("not found");
       });
   });
-  test("returns 404 not found whem  ", () => {
+
+  test("returns 404 not found when the search query value is not found", () => {
     return request(app)
-      .get("/api/books?dog=woof&condition=New")
-      .expect(400)
+      .get("/api/books?search=not-a-thing12749dj")
+      .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("bad request");
+        expect(body.msg).toBe("not found");
       });
   });
 });
@@ -822,7 +850,7 @@ describe("POST /api/books", () => {
   });
 });
 
-describe("/api/messages?users= ...", () => {
+describe("/api/messages?users=...", () => {
   test("GET:200 responds with an array of all messages between 2 users", () => {
     return request(app)
       .get("/api/messages?users=Sarah+Blue-David+Black")
@@ -944,6 +972,147 @@ describe("/api/messages/:username", () => {
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("user not found");
+      });
+  });
+});
+
+describe("PATCH /api/books/:id", () => {
+  test("PATCH:200 updates book condition, returns with updated book object", () => {
+    const update = {
+      newCondition: "New",
+    };
+    const expectedResponse = {
+      _id: "6593f8b7fdb38e563114965f",
+      title: "The Hitchhiker's Guide to the Galaxy",
+      author: "Douglas Adams",
+      username: "John Doe",
+      published_date: "1979-10-12",
+      genre: "Science Fiction",
+      isbn: "978-0-345-39180-3",
+      description: "A nice book",
+      condition: "New",
+      borrow_length: "2 weeks",
+      book_img:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU",
+      __v: 0,
+    };
+
+    return request(app)
+      .patch("/api/books/6593f8b7fdb38e563114965f")
+      .send(update)
+      .expect(200)
+      .then(({ body }) => {
+        const { book } = body;
+        expect(book).toMatchObject(expectedResponse);
+      });
+  });
+  test("PATCH:200 updates book borrow_length, returns with updated book object", () => {
+    const update = {
+      newBorrow_length: "1 week",
+    };
+    const expectedResponse = {
+      _id: "6593f8b7fdb38e563114965f",
+      title: "The Hitchhiker's Guide to the Galaxy",
+      author: "Douglas Adams",
+      username: "John Doe",
+      published_date: "1979-10-12",
+      genre: "Science Fiction",
+      isbn: "978-0-345-39180-3",
+      description: "A nice book",
+      condition: "Old",
+      borrow_length: "1 week",
+      book_img:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU",
+      __v: 0,
+    };
+
+    return request(app)
+      .patch("/api/books/6593f8b7fdb38e563114965f")
+      .send(update)
+      .expect(200)
+      .then(({ body }) => {
+        const { book } = body;
+        expect(book).toMatchObject(expectedResponse);
+      });
+  });
+  test("PATCH:200 updates book 2 properties of a book returns with updated book object", () => {
+    const update = {
+      newGenre: "Fiction",
+      newDescription: "A really intereting book about space",
+    };
+    const expectedResponse = {
+      _id: "6593f8b7fdb38e563114965f",
+      title: "The Hitchhiker's Guide to the Galaxy",
+      author: "Douglas Adams",
+      username: "John Doe",
+      published_date: "1979-10-12",
+      genre: "Fiction",
+      isbn: "978-0-345-39180-3",
+      description: "A really intereting book about space",
+      condition: "Old",
+      borrow_length: "2 weeks",
+      book_img:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU",
+      __v: 0,
+    };
+
+    return request(app)
+      .patch("/api/books/6593f8b7fdb38e563114965f")
+      .send(update)
+      .expect(200)
+      .then(({ body }) => {
+        const { book } = body;
+        expect(book).toMatchObject(expectedResponse);
+      });
+  });
+  test("PATCH:400 responds with an error if the data types in request body are invalid", () => {
+    const update = {
+      newGenre: 7,
+    };
+
+    return request(app)
+      .patch("/api/books/6593f8b7fdb38e563114965f")
+      .send(update)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+  test("PATCH:400 responds with an error if the key is invalid in request body", () => {
+    const update = {
+      newDog: "woof",
+    };
+
+    return request(app)
+      .patch("/api/books/6593f8b7fdb38e563114965f")
+      .send(update)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+  test("PATCH:400 responds with an error if the request body is empty", () => {
+    const update = {};
+
+    return request(app)
+      .patch("/api/books/6593f8b7fdb38e563114965f")
+      .send(update)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+  test("PATCH:404 responds with an error if the id is valid but book doesn't exist", () => {
+    const update = {
+      newGenre: "Fiction",
+    };
+
+    return request(app)
+      .patch("/api/books/6598g8b7fdb38e563114965f")
+      .send(update)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("book not found");
       });
   });
 });
