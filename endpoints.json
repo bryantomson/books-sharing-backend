@@ -21,12 +21,13 @@
     "queries": [
       "username",
       "location",
-      "password", 
+      "password",
       "avatar_img",
       "bio",
       "rating",
       "number_borrowed",
-      "number_lent,"],
+      "number_lent,"
+    ],
     "exampleResponse": {
       "user": {}
     }
@@ -143,15 +144,13 @@
         "genre": "Coming-of-location",
         "__v": "0"
       }
-    } 
+    }
   },
   "DELETE /api/books/:book_id": {
     "description": "deletes a book",
     "queries": [],
     "exampleResponse": {
-      "books": [
-        {}
-      ]
+      "books": [{}]
     }
   },
   "POST /api/books": {
@@ -187,6 +186,21 @@
         "_id": "new ObjectId('65943ae82e3aabceb0fc43c3')",
         "genre": "Horror"
       }
+    }
+  },
+  "GET /api/messages": {
+    "description": "serves an array of messages between 2 users from least to most recent message. users query required",
+    "queries": ["users"],
+    "exampleRequest": "/api/messages?users=David+Black-Emily+White",
+    "exampleResponse": {
+      "messages": [
+        {
+          "between": ["David Black", "Emily White"],
+          "from": "Alice Green",
+          "timestamp": "2023-12-31T13:40:00",
+          "body": "Hello, is anyone there?"
+        }
+      ]
     }
   }
 }

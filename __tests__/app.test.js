@@ -830,6 +830,9 @@ describe("/api/messages?users= ...", () => {
       .then(({ body }) => {
         const { messages } = body;
         expect(messages).toHaveLength(4);
+        expect(messages).toBeSortedBy("timestamp", {
+          descending: false,
+        });
         messages.forEach((message) => {
           expect(message).toMatchObject({
             _id: expect.any(String),
@@ -838,6 +841,8 @@ describe("/api/messages?users= ...", () => {
             timestamp: expect.any(String),
             body: expect.any(String),
           });
+          expect(message.between.includes("Sarah Blue")).toBe(true);
+          expect(message.between.includes("David Black")).toBe(true);
         });
       });
   });
@@ -857,6 +862,38 @@ describe("/api/messages?users= ...", () => {
             body: expect.any(String),
           });
         });
+      });
+  });
+  test("GET:400 responds with an error if no users in query", () => {
+    return request(app)
+      .get("/api/messages")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+  test("GET:400 responds with an error for an invalid query", () => {
+    return request(app)
+      .get("/api/messages?bananas=David+Black-Emily+White")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+  test("GET:400 responds with an error for requesting not 2 users", () => {
+    return request(app)
+      .get("/api/messages?users=David+Black-Emily+White-Sarah+Blue")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+  test("GET:404 responds with an error if no messages found", () => {
+    return request(app)
+      .get("/api/messages?users=Emily+White-Sarah+Blue")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("not found");
       });
   });
 });
