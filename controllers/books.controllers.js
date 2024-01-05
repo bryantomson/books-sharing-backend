@@ -3,7 +3,7 @@ const {
   findBooks,
   addBook,
   deleteBookListing,
-  updateBookById,
+  updateBookById
 } = require("../models/books.models");
 
 exports.getBookById = (req, res, next) => {
