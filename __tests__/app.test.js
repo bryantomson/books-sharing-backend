@@ -720,4 +720,17 @@ describe("POST /api/books", () => {
           expect(body.msg).toBe("bad request");
         });
     });
+    test("PATCH:404 responds with an error if the id is valid but book doesn't exist", () => {
+      const update = {
+        newGenre: 'Fiction',
+      };
+  
+      return request(app)
+        .patch("/api/books/6598g8b7fdb38e563114965f")
+        .send(update)
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe("book not found");
+        });
+    });
   });
