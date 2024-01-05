@@ -12,7 +12,7 @@ const {
   getBooks,
   postBook,
   deleteBookById,
-  patchBookById
+  patchBookById,
 } = require("./controllers/books.controllers");
 const {
   handleCustomErrors,
@@ -21,8 +21,8 @@ const {
 } = require("./errors/errors");
 
 const app = express();
-const db = require("./db/connection") // this is necessary for the connection file to run, do not delete
-
+const db = require("./db/connection"); // this is necessary for the connection file to run, do not delete
+const { getMessages } = require("./controllers/messages.controllers");
 
 app.use(express.json());
 
@@ -40,7 +40,7 @@ app.get("/api/books/:id", getBookById);
 
 app.post("/api/books", postBook);
 
-app.patch('/api/books/:id',patchBookById)
+app.patch("/api/books/:id", patchBookById);
 
 app.get("/api/genres", getGenres);
 
@@ -50,7 +50,8 @@ app.delete("/api/books/:book_id", deleteBookById);
 
 app.delete("/api/users/:user_id", deleteUser);
 
-app.use(handleMongoErrors);
+app.get("/api/messages", getMessages);
+
 app.use(handleCustomErrors);
 app.use(handleMongoErrors);
 app.use(handleServerErrors);

@@ -48,21 +48,18 @@ exports.findBooks = (queries) => {
   };
 
   for (const key in queries) {
-    if (!filters.hasOwnProperty(key) && key!=="search") {
+    if (!filters.hasOwnProperty(key) && key !== "search") {
       return Promise.reject({ status: 400, msg: "bad request" });
     }
   }
 
-
-
-  return Book.find(filters)
-    .then((res) => {
-      if (!res.length) {
-        return Promise.reject({ status: 404, msg: "not found" });
-      } else {
-        return res;
-      }
-    })
+  return Book.find(filters).then((res) => {
+    if (!res.length) {
+      return Promise.reject({ status: 404, msg: "not found" });
+    } else {
+      return res;
+    }
+  });
 };
 
 exports.deleteBookListing = (id) => {
@@ -90,7 +87,7 @@ exports.addBook = (newBook) => {
   });
 };
 
-exports.updateBookById = (book,request)=>{
+exports.updateBookById = (book, request) => {
   const validUpdates = [
     "newTitle",
     "newAuthor",
@@ -100,7 +97,7 @@ exports.updateBookById = (book,request)=>{
     "newDescription",
     "newCondition",
     "newBorrow_length",
-    "newBook_img"
+    "newBook_img",
   ];
   for (const key in request) {
     if (!validUpdates.includes(key)) {
@@ -112,22 +109,25 @@ exports.updateBookById = (book,request)=>{
     !Object.keys(request).length ||
     (request.newTitle && typeof request.newTitle !== "string") ||
     (request.newAuthor && typeof request.newAuthor !== "string") ||
-    (request.newPublished_date && typeof request.newPublished_date !== "string") ||
+    (request.newPublished_date &&
+      typeof request.newPublished_date !== "string") ||
     (request.newGenre && typeof request.newGenre !== "string") ||
     (request.newIsbn && typeof request.newIsbn !== "string") ||
     (request.newDescription && typeof request.newDescription !== "string") ||
-    (request.newCondition && typeof request.newCondition !== "string") || 
-    (request.newBorrow_length && typeof request.newBorrow_length !== "string") || 
-    (request.newBook_img && typeof request.newBook_img !== "string") 
+    (request.newCondition && typeof request.newCondition !== "string") ||
+    (request.newBorrow_length &&
+      typeof request.newBorrow_length !== "string") ||
+    (request.newBook_img && typeof request.newBook_img !== "string")
   ) {
     return Promise.reject({ status: 400, msg: "bad request" });
   }
-  
+
   if (request.newTitle) book.title = request.newTitle;
   if (request.newAuthor) book.author = request.newAuthor;
-  if (request.newPublished_date) book.published_date = request.newPublished_date;
+  if (request.newPublished_date)
+    book.published_date = request.newPublished_date;
   if (request.newGenre) book.genre = request.newGenre;
-  if (request.newIsbn)  book.isbn = request.newIsbn;
+  if (request.newIsbn) book.isbn = request.newIsbn;
   if (request.newDescription) book.description = request.newDescription;
   if (request.newCondition) book.condition = request.newCondition;
   if (request.newBorrow_length) book.borrow_length = request.newBorrow_length;
@@ -136,5 +136,4 @@ exports.updateBookById = (book,request)=>{
   return book.save().then((patchedBook) => {
     return patchedBook;
   });
-  
-}
+};

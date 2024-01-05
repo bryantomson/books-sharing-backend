@@ -199,28 +199,34 @@ const seedUsers = [
 ];
 const seedMessages = [
   {
-    between: ["Sarah Blue", "David Black"],
+    between: ["David Black", "Sarah Blue"],
     from: "Sarah Blue",
-    timestamp: "2023/12/31 13:31",
+    timestamp: "2023-12-31T13:31:00",
     body: "Hello David",
   },
   {
-    between: ["Sarah Blue", "David Black"],
+    between: ["David Black", "Sarah Blue"],
     from: "David Black",
-    timestamp: "2023/12/31 13:34",
+    timestamp: "2023-12-31T13:34:00",
     body: "Hello Sarah",
   },
   {
-    between: ["Sarah Blue", "David Black"],
+    between: ["David Black", "Sarah Blue"],
     from: "Sarah Blue",
-    timestamp: "2023/12/31 13:36",
+    timestamp: "2023-12-31T13:36:00",
     body: "How are you David",
   },
   {
-    between: ["Sarah Blue", "David Black"],
+    between: ["David Black", "Sarah Blue"],
     from: "David Black",
-    timestamp: "2023/12/31 13:40",
+    timestamp: "2023-12-31T13:41:00",
     body: "I am good Sarah",
+  },
+  {
+    between: ["David Black", "Emily White"],
+    from: "Emily White",
+    timestamp: "2023-12-31T13:40:00",
+    body: "Hello, is anyone there?",
   },
 ];
 const seedGenres = [

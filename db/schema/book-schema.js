@@ -15,15 +15,15 @@ const booksSchema = new mongoose.Schema({
   },
   published_date: {
     type: String,
-    required: false
+    required: false,
   },
   genre: {
     type: String,
-    required: false
+    required: false,
   },
   isbn: {
     type: String,
-    required: true
+    required: true,
   },
   description: {
     type: String,
@@ -40,7 +40,7 @@ const booksSchema = new mongoose.Schema({
   book_img: {
     type: String,
     required: false,
-  }
+  },
 });
 
 booksSchema.index({
