@@ -2,7 +2,8 @@ const {
   selectSingleBook,
   findBooks,
   addBook,
-  deleteBookListing
+  deleteBookListing,
+  updateBookById,
 } = require("../models/books.models");
 
 exports.getBookById = (req, res, next) => {
@@ -47,3 +48,15 @@ exports.postBook = (req, res, next) => {
     })
     .catch(next);
 };
+
+exports.patchBookById =(req,res,next)=>{
+  const {id} = req.params
+  selectSingleBook(id)
+  .then((book)=>{
+    return updateBookById(book, req.body)
+  })
+  .then((book)=>{
+res.status(200).send({book})
+  })
+   .catch(next)
+}

@@ -12,6 +12,7 @@ const {
   getBooks,
   postBook,
   deleteBookById,
+  patchBookById
 } = require("./controllers/books.controllers");
 const {
   handleCustomErrors,
@@ -38,6 +39,8 @@ app.get("/api/books", getBooks);
 app.get("/api/books/:id", getBookById);
 
 app.post("/api/books", postBook);
+
+app.patch('/api/books/:id',patchBookById)
 
 app.get("/api/genres", getGenres);
 
