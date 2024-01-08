@@ -823,6 +823,9 @@ describe("POST: /api/login", () => {
       .post("/api/login")
       .send({ username: 'King Richard III', password: 'incorrect' })
       .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe('user not found')
+      })
   });
 })
 
