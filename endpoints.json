@@ -188,6 +188,21 @@
       }
     }
   },
+  "POST /api/login": {
+    "description": "posts user login info to compare if user and password match from the database",
+    "queries": [],
+    "exampleRequestBody": {
+      "username": "John Doe",
+      "password": "Fiction"
+    },
+    "exampleResponse": {
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNzA0NDcxOTAzfQ.jsjOfC0vSYBg0lhSoFsC2ZR3wCqsvwdXd8mB4obc6OM"
+    }
+  },
+  "GET /api/protected": {
+    "description": "checks if the web token created matches",
+    "queries": [],
+    "exampleResponse": {}
   "GET /api/messages": {
     "description": "serves an array of messages between 2 users from least to most recent message. users query required",
     "queries": ["users"],

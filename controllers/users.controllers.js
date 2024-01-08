@@ -1,4 +1,12 @@
-const { selectUserById, selectUsers, addUser, updateUser, deleteUserById } = require("../models/users.models");
+const jwt = require('jsonwebtoken');
+const { selectUserById,
+    selectUsers,
+    addUser,
+    updateUser,
+    deleteUserById,
+    authenticateLogin,
+    checkValidToken
+   } = require("../models/users.models");
 
 
 exports.getUserById = (req, res, next) => {
@@ -51,7 +59,6 @@ exports.postUser = (req, res, next) => {
     .catch(next)
 }
 
-
 exports.patchUser = (req, res, next) => {
   const { user_id } = req.params;
   selectUserById(user_id)
@@ -64,3 +71,21 @@ exports.patchUser = (req, res, next) => {
     .catch(next);
 };
 
+exports.postLogin = (req, res, next) => {
+  const { username, password } = req.body;
+  authenticateLogin(username,password)
+    .then((user) => {
+      const token = jwt.sign({ username: user.username }, 'secret-key');
+      res.status(200).json({ token });
+    })
+    .catch(next);
+};
+
+exports.getToken = (req, res, next) => {
+  const token = req.headers.authorization;
+  checkValidToken(token)
+    .then((decoded) => {
+      res.status(200).send('Protected route accessed');
+    })
+    .catch(next);
+};
