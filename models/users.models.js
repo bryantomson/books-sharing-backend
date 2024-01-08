@@ -16,12 +16,15 @@ exports.selectUserById = (id) => {
   });
 };
 
-exports.selectUsers = () => {
-  return User.find({}).then((users) => {
-    return users
-  })
-
-}
+exports.selectUsers = (username) => {
+  const filters = {};
+  if (username) {
+    filters.username = username;
+  }
+  return User.find(filters).then((users) => {
+    return users;
+  });
+};
 
 exports.addUser = (newUser) => {
 
@@ -66,9 +69,7 @@ exports.addUser = (newUser) => {
   });
 };
 
-
 exports.deleteUserById = (id) => {
-  
   if (id.length !== 24) {
     return Promise.reject({ status: 400, msg: "bad request" });
   }
@@ -81,7 +82,6 @@ exports.deleteUserById = (id) => {
     }
   });
 };
-
 
 exports.updateUser = (user, request) => {
   const validUpdates = [
@@ -157,3 +157,4 @@ exports.checkValidToken = (token) => {
     }
   });
 };
+

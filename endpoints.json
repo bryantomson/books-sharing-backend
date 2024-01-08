@@ -21,12 +21,13 @@
     "queries": [
       "username",
       "location",
-      "password", 
+      "password",
       "avatar_img",
       "bio",
       "rating",
       "number_borrowed",
-      "number_lent,"],
+      "number_lent,"
+    ],
     "exampleResponse": {
       "user": {}
     }
@@ -143,15 +144,13 @@
         "genre": "Coming-of-location",
         "__v": "0"
       }
-    } 
+    }
   },
   "DELETE /api/books/:book_id": {
     "description": "deletes a book",
     "queries": [],
     "exampleResponse": {
-      "books": [
-        {}
-      ]
+      "books": [{}]
     }
   },
   "POST /api/books": {
@@ -204,5 +203,64 @@
     "description": "checks if the web token created matches",
     "queries": [],
     "exampleResponse": {}
+  "GET /api/messages": {
+    "description": "serves an array of messages between 2 users from least to most recent message. users query required",
+    "queries": ["users"],
+    "exampleRequest": "/api/messages?users=David+Black-Emily+White",
+    "exampleResponse": {
+      "messages": [
+        {
+          "between": ["David Black", "Emily White"],
+          "from": "David Black",
+          "timestamp": "2023-12-31T13:40:00",
+          "body": "Hello, is anyone there?"
+        }
+      ]
+    }
+  },
+  "GET /api/messages/:username": {
+    "description": "serves an array of all the user's conversations",
+    "queries": [],
+    "exampleRequest": "/api/messages/David%20Black",
+    "exampleResponse": {
+      "conversations": [
+        {
+          "with": "Emily White",
+          "timestamp": "2023-12-31T13:40:00"
+        }
+      ]
+    }
+  },
+  "PATCH /api/books/:id": {
+    "description": "patches an existing book object with the requested book ID, responds with the updated book object",
+    "validRequestBodyProperties": [
+      "title",
+      "author",
+      "published_date",
+      "genre",
+      "isbn",
+      "description",
+      "condition",
+      "borrow_length",
+      "book_img"
+    ],
+    "exampleRequestBody": {
+      "genre": "Fiction",
+      "description": "A really intereting book about space"
+    },
+    "exampleResponse": {
+      "_id": "6593f8b7fdb38e563114965f",
+      "title": "The Hitchhiker's Guide to the Galaxy",
+      "author": "Douglas Adams",
+      "username": "John Doe",
+      "published_date": "1979-10-12",
+      "genre": "Fiction",
+      "isbn": "978-0-345-39180-3",
+      "description": "A really intereting book about space",
+      "condition": "Old",
+      "borrow_length": "2 weeks",
+      "book_img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTXgU-vt2koE7lGQcUZ2r4d03kOrDjsfFVye9cyJI4DOwseczvjqCZRqjOWL53u0IQUcs&usqp=CAU",
+      "__v": "0"
+    }
   }
 }

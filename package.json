@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "listen.js",
+  "jest": {
+    "setupFilesAfterEnv": [
+      "jest-sorted"
+    ]
+  },
   "scripts": {
     "dev": "nodemon listen.js",
     "test": "jest --detectOpenHandles",
@@ -25,6 +30,7 @@
     "supertest": "^6.3.3"
   },
   "devDependencies": {
+    "jest-sorted": "^1.0.14",
     "nodemon": "^3.0.2"
   }
 }
