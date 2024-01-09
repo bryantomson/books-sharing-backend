@@ -6,6 +6,7 @@ const db = require("../db/connection.js");
 const seed = require("../db/seed.js");
 const { ObjectId } = require("mongodb");
 let authToken;
+const listOfEndpoints = require("../endpoints.json");
 
 beforeEach(() => {
   return seed()
@@ -25,6 +26,27 @@ beforeEach(() => {
 
 afterAll(() => {
   db.close();
+});
+
+describe("GET /api", () => {
+  test("/api status 200: responds with the endpoint avaialble using the endpoints.json file", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toHaveProperty("endpoints");
+        expect(body.endpoints).toEqual(listOfEndpoints);
+      });
+  });
+  test("Error 404: returns an error 404 for a route that does not exist", () => {
+    return request(app)
+      .get("/api/invalidpath")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Not found");
+      });
+  });
 });
 
 describe("/api/users", () => {

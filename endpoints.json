@@ -1,4 +1,7 @@
 {
+  "GET /api": {
+    "description": "serves up a json representation of all the available endpoints of the api"
+  },
   "GET /api/users/:user_id": {
     "description": "serves a single user object with the requested user ID",
     "queries": [],
@@ -203,6 +206,7 @@
     "description": "checks if the web token created matches",
     "queries": [],
     "exampleResponse": {}
+  },
   "GET /api/messages": {
     "description": "serves an array of messages between 2 users from least to most recent message. users query required",
     "queries": ["users"],
