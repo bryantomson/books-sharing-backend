@@ -1,6 +1,6 @@
 const request = require("supertest");
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const app = require("../app.js");
 const db = require("../db/connection.js");
 const seed = require("../db/seed.js");
@@ -9,19 +9,21 @@ let authToken;
 const listOfEndpoints = require("../endpoints.json");
 
 beforeEach(() => {
-  return seed()
-  //logs in so that a webtoken can be generated for testing the /api/protected endpoint
-    .then(() => {
-      const testUser = { username: 'John Doe', password: 'Fiction' };
+  return (
+    seed()
+      //logs in so that a webtoken can be generated for testing the /api/protected endpoint
+      .then(() => {
+        const testUser = { username: "John Doe", password: "Fiction" };
 
-      return request(app)
-        .post("/api/login")
-        .send(testUser)
-        .expect(200)
-        .then(({body}) => {
-          authToken = body.token
-        })
-    })
+        return request(app)
+          .post("/api/login")
+          .send(testUser)
+          .expect(200)
+          .then(({ body }) => {
+            authToken = body.token;
+          });
+      })
+  );
 });
 
 afterAll(() => {
@@ -72,8 +74,40 @@ describe("/api/users", () => {
         });
       });
   });
+  test("?username= GET:200 accepts a username query and responds with a single user object", () => {
+    return request(app)
+      .get("/api/users?username=Michael Brown")
+      .expect(200)
+      .then(({ body }) => {
+        const user = body.users[0];
+        expect(user.username).toBe("Michael Brown");
+        expect(user.location).toBe("Liverpool");
+        expect(user.avatar_img).toBe(
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU"
+        );
+        expect(user.bio).toBe("hello my name is username");
+        expect(user.rating).toBe(0);
+        expect(user.number_borrowed).toBe(1);
+        expect(user.number_lent).toBe(2);
+      });
+  });
+  test("?username= GET:404 responds with an error if the username doesn't exist", () => {
+    return request(app)
+      .get("/api/users?username=Bob Ross")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("user not found");
+      });
+  });
+  test("?username= GET:400 responds with an error if the query is invalid", () => {
+    return request(app)
+      .get("/api/users?banana=Bob Ross")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
   test("POST:201 responds with a new user object", () => {
-
     const newUser = {
       _id: new ObjectId("6594007551053b8f385697ab"),
       username: "Bob Ross",
@@ -90,9 +124,9 @@ describe("/api/users", () => {
       .expect(201)
       .then(({ body }) => {
         //password has been replaced with the hashed version
-        expect(body.user.password).not.toBe('Art');
+        expect(body.user.password).not.toBe("Art");
         //compares the original password with the hashed password to find match
-        expect(bcrypt.compare('Art', body.user.password)).resolves.toBe(true);
+        expect(bcrypt.compare("Art", body.user.password)).resolves.toBe(true);
 
         expect(body.user._id).toBe("6594007551053b8f385697ab");
         expect(body.user.username).toBe("Bob Ross");
@@ -194,19 +228,19 @@ describe("/api/users", () => {
 
 describe("/api/users/:user_id", () => {
   test("GET:200 responds with a single user object", () => {
-   
     return request(app)
       .get("/api/users/6594007551053b8f385697a7")
       .expect(200)
       .then(({ body }) => {
         expect(body.user.username).toBe("Michael Brown");
         expect(body.user.location).toBe("Liverpool");
-        expect(body.user.avatar_img).toBe("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU");
+        expect(body.user.avatar_img).toBe(
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU"
+        );
         expect(body.user.bio).toBe("hello my name is username");
         expect(body.user.rating).toBe(0);
         expect(body.user.number_borrowed).toBe(1);
         expect(body.user.number_lent).toBe(2);
-        
       });
   });
   test("GET:404 responds with an error if the id is valid but user doesn't exist", () => {
@@ -237,7 +271,9 @@ describe("/api/users/:user_id", () => {
       .then(({ body }) => {
         expect(body.user.username).toBe("John Doe");
         expect(body.user.location).toBe("Liverpool");
-        expect(body.user.avatar_img).toBe("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU");
+        expect(body.user.avatar_img).toBe(
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU"
+        );
         expect(body.user.bio).toBe("hello my name is username");
         expect(body.user.rating).toBe(0);
         expect(body.user.number_borrowed).toBe(1);
@@ -245,7 +281,6 @@ describe("/api/users/:user_id", () => {
       });
   });
   test("PATCH:200 updates password, returns with updated user object", () => {
-
     const hashedPassword = bcrypt.hashSync("fjksaoijhio768", 10);
 
     const update = {
@@ -278,7 +313,7 @@ describe("/api/users/:user_id", () => {
       newAvatar:
         "https://cdn.iconscout.com/icon/free/png-512/free-avatar-370-456322.png?f=webp&w=512",
     };
-    
+
     return request(app)
       .patch("/api/users/6594007551053b8f385697a3")
       .send(update)
@@ -286,7 +321,9 @@ describe("/api/users/:user_id", () => {
       .then(({ body }) => {
         expect(body.user.username).toBe("John Doe");
         expect(body.user.location).toBe("Manchester");
-        expect(body.user.avatar_img).toBe("https://cdn.iconscout.com/icon/free/png-512/free-avatar-370-456322.png?f=webp&w=512");
+        expect(body.user.avatar_img).toBe(
+          "https://cdn.iconscout.com/icon/free/png-512/free-avatar-370-456322.png?f=webp&w=512"
+        );
         expect(body.user.bio).toBe("hello my name is username");
         expect(body.user.rating).toBe(0);
         expect(body.user.number_borrowed).toBe(1);
@@ -297,7 +334,7 @@ describe("/api/users/:user_id", () => {
     const update = {
       newBio: "This my new, updated bio. So cool!",
     };
-    
+
     return request(app)
       .patch("/api/users/6594007551053b8f385697a3")
       .send(update)
@@ -305,7 +342,9 @@ describe("/api/users/:user_id", () => {
       .then(({ body }) => {
         expect(body.user.username).toBe("John Doe");
         expect(body.user.location).toBe("Manchester");
-        expect(body.user.avatar_img).toBe("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU");
+        expect(body.user.avatar_img).toBe(
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU"
+        );
         expect(body.user.bio).toBe("This my new, updated bio. So cool!");
         expect(body.user.rating).toBe(0);
         expect(body.user.number_borrowed).toBe(1);
@@ -316,7 +355,7 @@ describe("/api/users/:user_id", () => {
     const update = {
       incrementRating: 1,
     };
-    
+
     return request(app)
       .patch("/api/users/6594007551053b8f385697a3")
       .send(update)
@@ -324,7 +363,9 @@ describe("/api/users/:user_id", () => {
       .then(({ body }) => {
         expect(body.user.username).toBe("John Doe");
         expect(body.user.location).toBe("Manchester");
-        expect(body.user.avatar_img).toBe("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU");
+        expect(body.user.avatar_img).toBe(
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU"
+        );
         expect(body.user.bio).toBe("hello my name is username");
         expect(body.user.rating).toBe(1);
         expect(body.user.number_borrowed).toBe(1);
@@ -335,7 +376,7 @@ describe("/api/users/:user_id", () => {
     const update = {
       incrementRating: -1,
     };
- 
+
     return request(app)
       .patch("/api/users/6594007551053b8f385697a3")
       .send(update)
@@ -343,7 +384,9 @@ describe("/api/users/:user_id", () => {
       .then(({ body }) => {
         expect(body.user.username).toBe("John Doe");
         expect(body.user.location).toBe("Manchester");
-        expect(body.user.avatar_img).toBe("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU");
+        expect(body.user.avatar_img).toBe(
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU"
+        );
         expect(body.user.bio).toBe("hello my name is username");
         expect(body.user.rating).toBe(-1);
         expect(body.user.number_borrowed).toBe(1);
@@ -354,7 +397,7 @@ describe("/api/users/:user_id", () => {
     const update = {
       incrementBorrowed: 1,
     };
-   
+
     return request(app)
       .patch("/api/users/6594007551053b8f385697a3")
       .send(update)
@@ -362,7 +405,9 @@ describe("/api/users/:user_id", () => {
       .then(({ body }) => {
         expect(body.user.username).toBe("John Doe");
         expect(body.user.location).toBe("Manchester");
-        expect(body.user.avatar_img).toBe("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU");
+        expect(body.user.avatar_img).toBe(
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU"
+        );
         expect(body.user.bio).toBe("hello my name is username");
         expect(body.user.rating).toBe(0);
         expect(body.user.number_borrowed).toBe(2);
@@ -381,7 +426,9 @@ describe("/api/users/:user_id", () => {
       .then(({ body }) => {
         expect(body.user.username).toBe("John Doe");
         expect(body.user.location).toBe("Manchester");
-        expect(body.user.avatar_img).toBe("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU");
+        expect(body.user.avatar_img).toBe(
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJtsmhBWoeKAlvI672Yz9z-f_P1MO6efK1RCfhJKXPHQwBhv91X-hqlXbpNbJAej0wDMo&usqp=CAU"
+        );
         expect(body.user.bio).toBe("hello my name is username");
         expect(body.user.rating).toBe(0);
         expect(body.user.number_borrowed).toBe(1);
@@ -852,69 +899,68 @@ describe("POST /api/books", () => {
 });
 
 describe("POST: /api/login", () => {
-  test('POST: 201 post login info', () => {
-
-    return request(app)   
+  test("POST: 201 post login info", () => {
+    return request(app)
       .post("/api/login")
-      .send({ username: 'John Doe', password: 'Fiction' })
+      .send({ username: "John Doe", password: "Fiction" })
       .expect(200)
       .then(({ body }) => {
-        expect(body.token).toBeDefined()
-      })
+        expect(body.token).toBeDefined();
+      });
   });
-  test('POST: 401 incorrect password', () => {
+  test("POST: 401 incorrect password", () => {
     return request(app)
       .post("/api/login")
-      .send({ username: 'John Doe', password: 'incorrect' })
-      .expect(401)
+      .send({ username: "John Doe", password: "incorrect" })
+      .expect(401);
   });
-  test('POST: 404 user does not exist', () => {
+  test("POST: 404 user does not exist", () => {
     return request(app)
       .post("/api/login")
-      .send({ username: 'King Richard III', password: 'incorrect' })
+      .send({ username: "King Richard III", password: "incorrect" })
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe('user not found')
-      })
+        expect(body.msg).toBe("user not found");
+      });
   });
-})
+});
 
 describe("GET: /api/protected", () => {
   test('should return 200 and "Protected route accessed" with a valid token', (done) => {
-
     request(app)
-      .get('/api/protected')
-      .set('Authorization', authToken)
+      .get("/api/protected")
+      .set("Authorization", authToken)
       .expect(200)
-      .expect('Protected route accessed', done);
+      .expect("Protected route accessed", done);
   });
   test('should return 401 and "Invalid token" if given non existant token', (done) => {
-    const fakeToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNzA0NDUyNjU0fQ.Yp4wqddmJbAM9L2nav951pX4XP7v7mXoGeDmoPFg8bs'
+    const fakeToken =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNzA0NDUyNjU0fQ.Yp4wqddmJbAM9L2nav951pX4XP7v7mXoGeDmoPFg8bs";
     request(app)
-      .get('/api/protected')
-      .set('Authorization', fakeToken)
+      .get("/api/protected")
+      .set("Authorization", fakeToken)
       .expect(401)
       .end((err, res) => {
         if (err) return done(err);
-        
+
         expect(res.body.msg).toBe("Invalid token");
         done();
       });
   });
   test('should return 401 and "Token not provided" if no token is provided', (done) => {
-   let fakeToken = ''
+    let fakeToken = "";
     request(app)
-      .get('/api/protected')
-      .set('Authorization', fakeToken)
+      .get("/api/protected")
+      .set("Authorization", fakeToken)
       .expect(401)
       .end((err, res) => {
         if (err) return done(err);
-        
+
         expect(res.body.msg).toBe("Token not provided");
         done();
       });
   });
-})
+});
 
 describe("/api/messages?users=...", () => {
   test("GET:200 responds with an array of all messages between 2 users", () => {
@@ -1182,4 +1228,3 @@ describe("PATCH /api/books/:id", () => {
       });
   });
 });
-

@@ -1,13 +1,13 @@
-const jwt = require('jsonwebtoken');
-const { selectUserById,
-    selectUsers,
-    addUser,
-    updateUser,
-    deleteUserById,
-    authenticateLogin,
-    checkValidToken
-   } = require("../models/users.models");
-
+const jwt = require("jsonwebtoken");
+const {
+  selectUserById,
+  selectUsers,
+  addUser,
+  updateUser,
+  deleteUserById,
+  authenticateLogin,
+  checkValidToken,
+} = require("../models/users.models");
 
 exports.getUserById = (req, res, next) => {
   const { user_id } = req.params;
@@ -19,12 +19,24 @@ exports.getUserById = (req, res, next) => {
 };
 
 exports.getUsers = (req, res, next) => {
-  selectUsers()
-    .then((users) => {
-      res.status(200).send({ users });
-    })
-    .catch(next);
-}
+  const { username } = req.query;
+  const valid = ["username"];
+  let validQuery = true;
+  for (const key in req.query) {
+    if (!valid.includes(key)) {
+      validQuery = false;
+    }
+  }
+  if (validQuery) {
+    selectUsers(username)
+      .then((users) => {
+        res.status(200).send({ users });
+      })
+      .catch(next);
+  } else {
+    Promise.reject({ status: 400, msg: "bad request" }).catch(next);
+  }
+};
 
 exports.deleteUser = (req, res, next) => {
   const { user_id } = req.params;
@@ -56,8 +68,8 @@ exports.postUser = (req, res, next) => {
     .then((user) => {
       res.status(201).send({ user });
     })
-    .catch(next)
-}
+    .catch(next);
+};
 
 exports.patchUser = (req, res, next) => {
   const { user_id } = req.params;
@@ -73,9 +85,9 @@ exports.patchUser = (req, res, next) => {
 
 exports.postLogin = (req, res, next) => {
   const { username, password } = req.body;
-  authenticateLogin(username,password)
+  authenticateLogin(username, password)
     .then((user) => {
-      const token = jwt.sign({ username: user.username }, 'secret-key');
+      const token = jwt.sign({ username: user.username }, "secret-key");
       res.status(200).json({ token });
     })
     .catch(next);
@@ -85,7 +97,7 @@ exports.getToken = (req, res, next) => {
   const token = req.headers.authorization;
   checkValidToken(token)
     .then((decoded) => {
-      res.status(200).send('Protected route accessed');
+      res.status(200).send("Protected route accessed");
     })
     .catch(next);
 };
