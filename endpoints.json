@@ -69,7 +69,7 @@
   },
   "GET /api/users": {
     "description": "serves an array of all users",
-    "queries": [],
+    "queries": ["username"],
     "exampleResponse": {
       "users": [
         {
@@ -199,7 +199,7 @@
       "password": "Fiction"
     },
     "exampleResponse": {
-        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNzA0NDcxOTAzfQ.jsjOfC0vSYBg0lhSoFsC2ZR3wCqsvwdXd8mB4obc6OM"
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNzA0NDcxOTAzfQ.jsjOfC0vSYBg0lhSoFsC2ZR3wCqsvwdXd8mB4obc6OM"
     }
   },
   "GET /api/protected": {
